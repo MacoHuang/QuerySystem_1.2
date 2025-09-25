@@ -1,13 +1,21 @@
 # QuerySystem v1.2
 
-### 關於
-建立基礎目前運行版本
-資料庫為google sheet
-程式平台google apps script
+### Base on
+google sites
+google sheet api
+google apps script
 
-## 目標改進增加項目
-- 修正輸入表單
-- 串API，不讓檔案出現在分享對像G drive
+## Feature
+- CMS
+- 內部物件查詢
+- 物件地圖功能
+
+## Update
+- 輸入表單api串接, CURD功能
+    - 𧬸本ORC辨識輸入
+- 新物件跑馬燈
+- 鑰匙借出入記錄
+- 績效圖表
 - 詳細資料彈出頁面為html同study格式
-- 物件地圖列表
-- 定位串國土測繪查地藉圖
+- 物件地圖+導航
+- 國土測繪地藉圖定位
