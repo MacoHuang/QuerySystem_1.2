@@ -422,6 +422,9 @@
             </table>
         </div>
         
+        <!-- 使用 hr 標籤來建立一個視覺分隔 -->
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e0e0e0;">
+
         <form id="dataForm">
             <div class="form-grid">
                 <!-- Row -->
@@ -468,7 +471,7 @@
                         </div>
                     </div>
                 </div>
-
+        
                 <!-- Row -->
                 <div class="form-row">
                     <div class="form-group">
@@ -486,21 +489,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="landArea">土地坪</label>
-                        <input type="number" id="landArea" name="landArea" step="0.01" placeholder="單位: 坪">
+                        <label for="useOn">主要用途</label>
+                        <input type="text" id="useOn" name="useOn" placeholder="主要用途">
                     </div>
-                    <div class="form-group">
-                        <label for="totalArea">總建坪</label>
-                        <input type="number" id="totalArea" name="totalArea" step="0.01" placeholder="單位: 坪">
-                    </div>
-                    <div class="form-group">
-                        <label for="completionDate">建物完成日</label>
-                        <input type="date" id="completionDate" name="completionDate">
-                    </div>
-                </div>
-
-                <!-- Row -->
-                <div class="form-row">
                     <div class="form-group">
                         <label for="structure">主要結構</label>
                         <select id="structure" name="structure">
@@ -510,6 +501,57 @@
                             <option value="加強磚造">加強磚造</option>
                             <option value="其他">其他</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="zoning">使用分區</label>
+                        <select id="zoning" name="zoning">
+                            <option value="">請選擇</option>
+                            <option value="住宅區">住宅區</option>
+                            <optino value="商業區">商業區</optino>
+                            <option value="工業區">工業區</option>
+                            <option value="農業區">農業區</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="landArea">土地坪</label>
+                        <input type="number" id="landArea" name="landArea" placeholder="單位: 坪">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalArea">總建坪</label>
+                        <input type="number" id="totalArea" name="totalArea" placeholder="單位: 坪">
+                    </div>
+                    <div class="form-group">
+                        <label for="subArea">附屬建坪</label>
+                        <input type="number" id="subArea" name="subArea" placeholder="單位: 坪">
+                    </div>
+                    <div class="form-group">
+                        <label for="completionDate">建物完成日</label>
+                        <input type="date" id="completionDate" name="completionDate">
+                    </div>
+                </div>
+                
+                <!-- Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="1floor">一樓坪數</label>
+                        <input type="number" id="1floor" name="1floor">
+                    </div>
+                    <div class="form-group">
+                        <label for="2floor">二樓坪數</label>
+                        <input type="number" id="2floor" name="2floor">
+                    </div>
+                    <div class="form-group">
+                        <label for="3floor">三樓坪數</label>
+                        <input type="number" id="3floor" name="3floor">
+                    </div>
+                    <div class="form-group">
+                        <label for="4floor">四樓坪數</label>
+                        <input type="number" id="4floor" name="4floor">
                     </div>
                 </div>
                 
@@ -559,14 +601,6 @@
                 <!-- Row -->
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="roadAccess">臨路</label>
-                        <input type="text" id="roadAccess" name="roadAccess" placeholder="8米巷道 = 8">
-                    </div>
-                    <div class="form-group">
-                        <label for="frontWidth">面寬</label>
-                        <input type="number" id="frontWidth" name="frontWidth" step="0.1" placeholder="單位: 米">
-                    </div>
-                    <div class="form-group">
                         <label for="parking-multiselect">車位</label>
                         <div class="multiselect-container" id="parking-multiselect">
                             <div class="select-btn">
@@ -587,8 +621,16 @@
                         <label for="parkingNumber">車位編號</label>
                         <input type="text" id="parkingNumber" name="parkingNumber">
                     </div>
+                    <div class="form-group">
+                        <label for="roadAccess">臨路</label>
+                        <input type="number" id="roadAccess" name="roadAccess" placeholder="8米巷道 = 8">
+                    </div>
+                    <div class="form-group">
+                        <label for="frontWidth">面寬</label>
+                        <input type="number" id="frontWidth" name="frontWidth" placeholder="單位: 米">
+                    </div>
                 </div>
-                
+
                 <!-- Row -->
                 <div class="form-row">
                     <div class="form-group">
@@ -631,7 +673,7 @@
                 </div>
             </div>
         </form>
-        
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e0e0e0;">
         <div class="form-controls">
             <button class="btn btn-success" onclick="newRecord()">📝 新增資料</button>
             <button class="btn btn-info" onclick="loadData()">📊 載入資料</button>
@@ -983,4 +1025,3 @@
     </script>
 </body>
 </html>
-
