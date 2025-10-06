@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建物 case study</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 4px solid #2c5f2d;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #2c5f2d;
+            margin: 0 0 8px 0;
+        }
+        
+        .header .code {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #2c5f2d 0%, #3a7a3c 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .price-box .label {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .price-box .price {
+            font-size: 42px;
+            font-weight: bold;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            background: #2c5f2d;
+            color: white;
+            padding: 10px 15px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-bottom: 12px;
+        }
+        
+        .info-grid {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .info-item {
+            display: flex;
+            padding: 5px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2c5f2d;
+            min-width: 100px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        th {
+            background: #2c5f2d;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .highlight-item {
+            background: #f0f7f0;
+            padding: 10px;
+            border-left: 4px solid #2c5f2d;
+            border-radius: 3px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+        
+        .contact-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .contact-info {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+        
+        .dates {
+            text-align: right;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .disclaimer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>建物 case study</h1>
+    </div>
+    
+    <div class="price-box">
+        <div class="label">東港車庫透天</div>
+        <div class="price">1680 萬</div>
+        <div class="code">物業編號：A077</div>
+    </div>
+    
+    <div class="content">
+        <div class="left-col">
+            <div class="section">
+                <div class="section-title">● 基本資料</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">地址：</span>
+                        <span>東港鎮水源一街32巷72弄1號</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">座向：</span>
+                        <span>座西北朝東南</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">土地面積：</span>
+                        <span>23.33 坪</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">建物面積：</span>
+                        <span>65.1 坪</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">建物型態：</span>
+                        <span>透天厝</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">樓層：</span>
+                        <span>4 樓</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">屋齡：</span>
+                        <span>4年2個月</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">完工日期：</span>
+                        <span>107/09/05</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">建築結構：</span>
+                        <span>鋼筋混凝土</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">分區：</span>
+                        <span>住宅區</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">● 格局配置</div>
+                <table>
+                    <tr>
+                        <th>樓層</th>
+                        <th>面積（坪）</th>
+                        <th>說明</th>
+                    </tr>
+                    <tr>
+                        <td>1樓</td>
+                        <td>14.77</td>
+                        <td>車庫空間</td>
+                    </tr>
+                    <tr>
+                        <td>2樓</td>
+                        <td>14.57</td>
+                        <td>居住空間</td>
+                    </tr>
+                    <tr>
+                        <td>3樓</td>
+                        <td>13.84</td>
+                        <td>居住空間</td>
+                    </tr>
+                    <tr>
+                        <td>4樓</td>
+                        <td>13.84</td>
+                        <td>居住空間</td>
+                    </tr>
+                    <tr>
+                        <td>屋突</td>
+                        <td>7.51</td>
+                        <td>頂樓加蓋</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="right-col">
+            <div class="section">
+                <div class="section-title">● 設施設備</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">電梯：</span>
+                        <span>有電梯</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">停車：</span>
+                        <span>室內車位</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">水源：</span>
+                        <span>自來水</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">臨路：</span>
+                        <span>5 米</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">面寬：</span>
+                        <span>5.3 米</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">管理費：</span>
+                        <span>無</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">格局：</span>
+                        <span>間間套房</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">用途：</span>
+                        <span>自用</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">● 物業優勢</div>
+                <div class="highlights">
+                    <div class="highlight-item">✓ 東港蛋黃區優質住宅</div>
+                    <div class="highlight-item">✓ 臨行政中心交通便利</div>
+                    <div class="highlight-item">✓ 可自住或自租皆有錢途</div>
+                    <div class="highlight-item">✓ 屋況良好精心打造</div>
+                    <div class="highlight-item">✓ 間間套房設計</div>
+                    <div class="highlight-item">✓ 有停車大空間</div>
+                    <div class="highlight-item">✓ 生活機能完善</div>
+                    <div class="highlight-item">✓ 增值潛力無限</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div class="contact-box">
+            <div class="contact-info">店長/業務：曾郁庭</div>
+            <div class="dates">
+                報件日期：113/11/01<br>
+                更新日期：114/08/06
+            </div>
+        </div>
+        <div class="disclaimer">
+            本宣傳廣告如與現場有差異，以現場實際狀況為準。如有爭議以實際登記為準。
+        </div>
+    </div>
+</body>
+</html>
