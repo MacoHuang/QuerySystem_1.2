@@ -1,5 +1,20 @@
 // Compiled using undefined undefined (TypeScript 4.9.5)
+
+/*1.GAS web app 執行身份(我),檔案免分享,google sites權限控制
+ *2.優化查詢速度,Google Visualization API Query Language (GQL),導入快取機制 (CacheService)
+ *3.文件權限"知道連結者"
+ */
+
+/** * 🚨 重要：請將此 ID 替換為您實際的 Google Sheet 檔案 ID
+ * 此 ID 可以在 Google Sheet 的網址中找到：
+ * https://docs.google.com/spreadsheets/d/這個部分就是ID/edit...
+ */
+const DATA_SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
+// 透過 ID 開啟目標 Sheet，確保 Web App 可以正確存取資料
+const DATA_SPREADSHEET = SpreadsheetApp.openById(DATA_SHEET_ID);
+
 var serviceUrl = ScriptApp.getService().getUrl();
+
 function getScriptUrl() {
     var url = ScriptApp.getService().getUrl();
     return url;
@@ -24,7 +39,7 @@ function doGet(request) {
     var path = request === null || request === void 0 ? void 0 : request.pathInfo;
     switch (path) {
         case 'map':
-            var positions = getAllPositions();
+            var positions = getAllPositions(); // 已導入快取
             var mapTemplate = HtmlService.createTemplateFromFile('objectMap');
             mapTemplate.positions = JSON.stringify(positions);
             return mapTemplate.evaluate().addMetaTag('viewport', 'width=device-width, initial-scale=1.0');
@@ -76,7 +91,8 @@ function showObjectA4Info(objectType, sequenceNumberInSheet) {
     return "";
 }
 function searchObjectInfo(objectType, sequenceNumberInSheet) {
-    var currentSheet = SpreadsheetApp.getActive().getSheetByName(objectType);
+    // 修正: 透過 DATA_SPREADSHEET 取得 Sheet，而非 getActive()
+    var currentSheet = DATA_SPREADSHEET.getSheetByName(objectType);
     var dataRange = currentSheet === null || currentSheet === void 0 ? void 0 : currentSheet.getDataRange();
     var values = dataRange === null || dataRange === void 0 ? void 0 : dataRange.getValues();
     var headers = values === null || values === void 0 ? void 0 : values.shift();
@@ -191,7 +207,7 @@ function createBuildingContract(data) {
     var googleDocId = '1fE0OZZQ00rcYU38vQWCl4h9kE2oJbHmz5uhb_FtP6Gs'; // google doc ID
     var outputFolderId = '1f-hfkEk0lxp2ha7-hcQ5E3mnsKRfMMUH'; // google drive資料夾ID
     // var googleDocId = '1fBHyUGHH0-hVNq2fTZVXKVxCJ0UYHjkpdOhM1jefQgI'; // 測試google doc ID
-    // var outputFolderId = '1lSczRQ0HEKQrcK8PgqHvqD2kLRmRtsrH'; // 測試google drive資料夾ID
+    // var outputFolderId = '1lSczRQ0HEKQrcK8PgfHvqD2kLRmRtsrH'; // 測試google drive資料夾ID
     var fileName = "".concat(data.objectName);
     var doc = createDoc(googleDocId, outputFolderId, fileName);
     renderBuildingDoc(doc, data);
@@ -201,7 +217,7 @@ function createLandContract(data) {
     var googleDocId = '1MkGlxmbkGtMayj1ZqHd5y9kIwigZ5ky_ZlwRR1h0hH0'; // google doc ID
     var outputFolderId = '1f-hfkEk0lxp2ha7-hcQ5E3mnsKRfMMUH'; // google drive資料夾ID
     // var googleDocId = '1noZPLBuWEowiDHni3p-6RoafbOV45BylHkdocQ39p0Y'; // 測試google doc ID
-    // var outputFolderId = '1lSczRQ0HEKQrcK8PgqHvqD2kLRmRtsrH'; // 測試google drive資料夾ID
+    // var outputFolderId = '1lSczRQ0HEKQrcK8PgfHvqD2kLRmRtsrH'; // 測試google drive資料夾ID
     var fileName = "".concat(data.objectName);
     var doc = createDoc(googleDocId, outputFolderId, fileName);
     renderLandDoc(doc, data);
@@ -215,61 +231,63 @@ function createDoc(googleDocId, outputFolderId, fileName) {
     var doc = DocumentApp.openById(copy.getId());
     return doc;
 }
+// **** 修正: 將所有 Unicode 跳脫序列替換為純中文 ****
 function renderBuildingDoc(doc, data) {
     var body = doc.getBody();
-    body.replaceText("{{\u7DE8\u865F}}", data.objectNumber);
-    body.replaceText("{{\u6848\u540D}}", data.objectName);
-    body.replaceText("{{\u5408\u7D04\u985E\u578B}}", data.contractType);
-    body.replaceText("{{\u5730\u5340}}", data.location);
-    body.replaceText("{{\u5F62\u614B}}", data.buildingType);
-    body.replaceText("{{\u683C\u5C40}}", data.housePattern);
-    body.replaceText("{{\u6A13\u5C64}}", data.floor.toString());
-    body.replaceText("{{\u5730\u5740}}", data.address);
-    body.replaceText("{{\u4F4D\u7F6E}}", data.position);
-    body.replaceText("{{\u7E3D\u50F9}}", data.valuation.toString());
-    body.replaceText("{{\u5730\u576A}}", data.landSize.toString());
-    body.replaceText("{{\u5EFA\u576A}}", data.buildingSize.toString());
-    body.replaceText("{{\u5EA7\u5411}}", data.direction);
-    body.replaceText("{{\u8ECA\u4F4D}}", data.vihecleParkingType);
-    body.replaceText("{{\u8ECA\u4F4D\u865F\u78BC}}", data.vihecleParkingNumber.toString());
-    body.replaceText("{{\u6C34\u96FB}}", data.waterSupply);
-    body.replaceText("{{\u81E8\u8DEF}}", data.roadNearby);
-    body.replaceText("{{\u9762\u5BEC}}", data.width.toString());
-    body.replaceText("{{\u5B8C\u6210\u65E5}}", data.buildingAge);
-    body.replaceText("{{\u5099\u8A3B}}", data.memo);
-    body.replaceText("{{\u806F\u7D61\u4EBA}}", data.contactPerson);
-    body.replaceText("{{\u5716\u7247\u9023\u7D50}}", data.pictureLink);
-    body.replaceText("{{\u5408\u7D04\u958B\u59CB\u65E5\u671F}}", data.contractDateFrom);
-    body.replaceText("{{\u5408\u7D04\u7D50\u675F\u65E5\u671F}}", data.contractDateTo);
+    body.replaceText("{{編號}}", data.objectNumber);
+    body.replaceText("{{案名}}", data.objectName);
+    body.replaceText("{{合約類型}}", data.contractType);
+    body.replaceText("{{地區}}", data.location);
+    body.replaceText("{{形態}}", data.buildingType);
+    body.replaceText("{{格局}}", data.housePattern);
+    body.replaceText("{{樓層}}", data.floor.toString());
+    body.replaceText("{{地址}}", data.address);
+    body.replaceText("{{位置}}", data.position);
+    body.replaceText("{{總價}}", data.valuation.toString());
+    body.replaceText("{{地坪}}", data.landSize.toString());
+    body.replaceText("{{建坪}}", data.buildingSize.toString());
+    body.replaceText("{{座向}}", data.direction);
+    body.replaceText("{{車位}}", data.vihecleParkingType);
+    body.replaceText("{{車位號碼}}", data.vihecleParkingNumber.toString());
+    body.replaceText("{{水電}}", data.waterSupply);
+    body.replaceText("{{臨路}}", data.roadNearby);
+    body.replaceText("{{面寬}}", data.width.toString());
+    body.replaceText("{{完成日}}", data.buildingAge);
+    body.replaceText("{{備註}}", data.memo);
+    body.replaceText("{{聯絡人}}", data.contactPerson);
+    body.replaceText("{{圖片連結}}", data.pictureLink);
+    body.replaceText("{{合約開始日期}}", data.contractDateFrom);
+    body.replaceText("{{合約結束日期}}", data.contractDateTo);
     doc.saveAndClose();
 }
+// **** 修正: 將所有 Unicode 跳脫序列替換為純中文 ****
 function renderLandDoc(doc, data) {
     var body = doc.getBody();
-    body.replaceText("{{\u7DE8\u865F}}", data.objectNumber);
-    body.replaceText("{{\u6848\u540D}}", data.objectName);
-    body.replaceText("{{\u5408\u7D04\u985E\u578B}}", data.contractType);
-    body.replaceText("{{\u5730\u5340}}", data.location);
-    body.replaceText("{{\u985E\u5225}}", data.landType);
-    body.replaceText("{{\u5206\u5340}}", data.landUsage);
-    body.replaceText("{{\u5F62\u614B}}", data.landPattern);
-    body.replaceText("{{\u5730\u5740}}", data.address);
-    body.replaceText("{{\u4F4D\u7F6E}}", data.position);
-    body.replaceText("{{\u7E3D\u50F9}}", data.valuation.toString());
-    body.replaceText("{{\u5730\u576A_1}}", data.landSize.toString());
-    body.replaceText("{{\u5730\u576A_2}}", (Math.round((data.landSize / 293.4) * 100) / 100).toString());
-    body.replaceText("{{\u6240\u6709\u6B0A\u4EBA\u6578}}", data.numberOfOwner.toString());
-    body.replaceText("{{\u81E8\u8DEF}}", data.roadNearby);
-    body.replaceText("{{\u5EA7\u5411}}", data.direction);
-    body.replaceText("{{\u6C34\u96FB}}", data.waterElectricitySupply);
-    body.replaceText("{{\u9762\u5BEC}}", data.width.toString());
-    body.replaceText("{{\u7E31\u6DF1}}", data.depth.toString());
-    body.replaceText("{{\u5EFA\u853D\u7387}}", data.buildingCoverageRate.toString());
-    body.replaceText("{{\u5BB9\u7A4D\u7387}}", data.volumeRate.toString());
-    body.replaceText("{{\u5099\u8A3B}}", data.memo);
-    body.replaceText("{{\u806F\u7D61\u4EBA}}", data.contactPerson);
-    body.replaceText("{{\u5716\u7247\u9023\u7D50}}", data.pictureLink);
-    body.replaceText("{{\u5408\u7D04\u958B\u59CB\u65E5\u671F}}", data.contractDateFrom);
-    body.replaceText("{{\u5408\u7D04\u7D50\u675F\u65E5\u671F}}", data.contractDateTo);
+    body.replaceText("{{編號}}", data.objectNumber);
+    body.replaceText("{{案名}}", data.objectName);
+    body.replaceText("{{合約類型}}", data.contractType);
+    body.replaceText("{{地區}}", data.location);
+    body.replaceText("{{類別}}", data.landType);
+    body.replaceText("{{分區}}", data.landUsage);
+    body.replaceText("{{形態}}", data.landPattern);
+    body.replaceText("{{地址}}", data.address);
+    body.replaceText("{{位置}}", data.position);
+    body.replaceText("{{總價}}", data.valuation.toString());
+    body.replaceText("{{地坪_1}}", data.landSize.toString());
+    body.replaceText("{{地坪_2}}", (Math.round((data.landSize / 293.4) * 100) / 100).toString());
+    body.replaceText("{{所有權人數}}", data.numberOfOwner.toString());
+    body.replaceText("{{臨路}}", data.roadNearby);
+    body.replaceText("{{座向}}", data.direction);
+    body.replaceText("{{水電}}", data.waterElectricitySupply);
+    body.replaceText("{{面寬}}", data.width.toString());
+    body.replaceText("{{縱深}}", data.depth.toString());
+    body.replaceText("{{建蔽率}}", data.buildingCoverageRate.toString());
+    body.replaceText("{{容積率}}", data.volumeRate.toString());
+    body.replaceText("{{備註}}", data.memo);
+    body.replaceText("{{聯絡人}}", data.contactPerson);
+    body.replaceText("{{圖片連結}}", data.pictureLink);
+    body.replaceText("{{合約開始日期}}", data.contractDateFrom);
+    body.replaceText("{{合約結束日期}}", data.contractDateTo);
     doc.saveAndClose();
 }
 var BuildingHeaders;
@@ -332,244 +350,136 @@ var LnadHeaders;
     LnadHeaders[LnadHeaders["CONTRACT_DATE_TO"] = 25] = "CONTRACT_DATE_TO";
     LnadHeaders[LnadHeaders["OBJECT_UPDATE_DATE"] = 26] = "OBJECT_UPDATE_DATE";
 })(LnadHeaders || (LnadHeaders = {}));
-function searchObjects(contractType, objectType, objectPattern, objectNmae, valuationFrom, valuationTo, landSizeFrom, landSizeTo, roadNearby, roomFrom, roomTo, isHasParkingSpace, buildingAgeFrom, buildingAgeTo, direction, objectWidthFrom, objectWidthTo, contactPerson) {
-    var listOfSheet = new Array();
-    if (objectType.toUpperCase() === 'BUILDING' || objectType.toUpperCase() === 'LAND') {
-        var currentSheet = SpreadsheetApp.getActive().getSheetByName(objectType);
-        if (currentSheet) {
-            listOfSheet.push(currentSheet);
-        }
+
+/**
+ * 輔助函數：將 GQL 欄位索引 (A, B, C...) 轉換為您的 Headers 列舉索引 (0, 1, 2...)
+ * 警告：GQL 始終從 A 欄開始，因此這是一個基於零的索引映射
+ */
+function getColumnIndex(columnLetter) {
+    const charCode = columnLetter.toUpperCase().charCodeAt(0);
+    return charCode - 'A'.charCodeAt(0);
+}
+
+/**
+ * 輔助函數：解析 GQL 傳回的特殊 JSON 格式
+ */
+function parseGqlResponse(response) {
+    const json = response.substring(response.indexOf('{'), response.lastIndexOf('}') + 1);
+    const data = JSON.parse(json);
+    if (!data.table || !data.table.rows) {
+        return [];
     }
-    else {
-        listOfSheet = SpreadsheetApp.getActive().getSheets();
-    }
-    var filteredValues = new Map();
-    var _loop_1 = function (currentSheet) {
-        var dataRange = currentSheet.getDataRange();
-        var values = dataRange.getValues();
-        var headers = values.shift();
-        console.log(objectPattern);
-        currentfilteredValues = values
-            .map(function (row) {
-            var obj = {};
-            obj = [values.indexOf(row) + 1, row];
-            return obj;
-        })
-            .filter(function (row) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-            var andConditionList = new Array();
-            var orConditionList = new Array();
-            var roadNearbyRange = roadNearby.split('|');
-            var objectNameKeywordList = objectNmae.split(' ');
-            var sheetName = currentSheet.getName().toUpperCase();
-            switch (sheetName) {
-                case 'BUILDING':
-                    andConditionList.push(((_a = row[1][BuildingHeaders.CONTRACT_TYPE]) === null || _a === void 0 ? void 0 : _a.toString().indexOf(contractType)) > -1);
-                    // andConditionList.push(
-                    //     row[1][BuildingHeaders.OBJECT_NAME]?.toString().indexOf(objectNmae) > -1 ||
-                    //     row[1][BuildingHeaders.LOCATION]?.toString().indexOf(objectNmae) > -1 ||
-                    //     row[1][BuildingHeaders.ADDRESS]?.toString().indexOf(objectNmae) > -1
-                    // )
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][LnadHeaders.OBJECT_NUMBER]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][BuildingHeaders.OBJECT_NAME]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][BuildingHeaders.LOCATION]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][BuildingHeaders.ADDRESS]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    var buildingUsageList = (_b = row[1][BuildingHeaders.BUILDING_TYPE]) === null || _b === void 0 ? void 0 : _b.toString().split(',');
-                    // andConditionList.push(objectPattern.includes(row[1][BuildingHeaders.BUILDING_TYPE]?.toString()))
-                    andConditionList.push(objectPattern.some(function (pattern) {
-                        return buildingUsageList.includes(pattern);
-                    }));
-                    if (roadNearbyRange && roadNearbyRange.length > 1) {
-                        andConditionList.push(row[1][BuildingHeaders.ROAD_NEARBY] >= roadNearbyRange[0] && row[1][BuildingHeaders.ROAD_NEARBY] <= roadNearbyRange[1]);
-                    }
-                    if (valuationFrom > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.VALUATION] >= valuationFrom);
-                    }
-                    if (valuationTo > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.VALUATION] <= valuationTo);
-                    }
-                    if (landSizeFrom > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.LAND_SIZE] >= landSizeFrom);
-                    }
-                    if (landSizeTo > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.LAND_SIZE] <= landSizeTo);
-                    }
-                    var roomOfBuilding = row[1][BuildingHeaders.HOUSE_PATTERN].toString().split('/');
-                    if (roomFrom > 0 && roomOfBuilding.length > 0) {
-                        andConditionList.push(roomOfBuilding[0] >= roomFrom);
-                    }
-                    if (roomTo > 0 && roomOfBuilding.length > 0) {
-                        andConditionList.push(roomOfBuilding[0] <= roomTo);
-                    }
-                    //console.log(`isHasParkingSpace:${isHasParkingSpace}`)
-                    if (isHasParkingSpace !== '') {
-                        var matchCondition = isHasParkingSpace === '1';
-                        console.log("matchCondition:".concat(matchCondition));
-                        console.log("VIHECLE_PARKING_TYPE:".concat((_c = row[1][BuildingHeaders.VIHECLE_PARKING_TYPE]) === null || _c === void 0 ? void 0 : _c.toString().trim()));
-                        console.log("VIHECLE_PARKING_TYPE:".concat(((_d = row[1][BuildingHeaders.VIHECLE_PARKING_TYPE]) === null || _d === void 0 ? void 0 : _d.toString().trim()) != '沒車位'));
-                        andConditionList.push((((_e = row[1][BuildingHeaders.VIHECLE_PARKING_TYPE]) === null || _e === void 0 ? void 0 : _e.toString().trim()) != '沒車位') == matchCondition);
-                    }
-                    // andConditionList.push(row[1][BuildingHeaders.WATER_SUPPLY]?.toString().indexOf(waterSupply) > -1)
-                    andConditionList.push(((_f = row[1][BuildingHeaders.DIRECTION]) === null || _f === void 0 ? void 0 : _f.toString().indexOf(direction)) > -1);
-                    if (objectWidthFrom > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.WIDTH] >= objectWidthFrom);
-                    }
-                    if (objectWidthTo > 0) {
-                        andConditionList.push(row[1][BuildingHeaders.WIDTH] <= objectWidthTo);
-                    }
-                    var buildingAge = ((_g = row[1][BuildingHeaders.BUILDING_AGE]) === null || _g === void 0 ? void 0 : _g.toString().split('/').pop()) || '0';
-                    if (buildingAgeFrom > 0) {
-                        andConditionList.push(buildingAge >= buildingAgeFrom);
-                    }
-                    if (buildingAgeTo > 0) {
-                        andConditionList.push(buildingAge <= buildingAgeTo);
-                    }
-                    andConditionList.push(((_h = row[1][BuildingHeaders.CONTACT_PERSON]) === null || _h === void 0 ? void 0 : _h.toString().indexOf(contactPerson)) > -1);
-                    break;
-                case 'LAND':
-                    andConditionList.push(((_j = row[1][LnadHeaders.CONTRACT_TYPE]) === null || _j === void 0 ? void 0 : _j.toString().indexOf(contractType)) > -1);
-                    // andConditionList.push(
-                    //     row[1][LnadHeaders.OBJECT_NAME]?.toString().indexOf(objectNmae) > -1 ||
-                    //     row[1][LnadHeaders.LOCATION]?.toString().indexOf(objectNmae) > -1 ||
-                    //     row[1][LnadHeaders.ADDRESS]?.toString().indexOf(objectNmae) > -1
-                    // )
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][LnadHeaders.OBJECT_NUMBER]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][LnadHeaders.OBJECT_NAME]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][LnadHeaders.LOCATION]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    orConditionList.push(objectNameKeywordList.some(function (keywords) {
-                        var _a;
-                        return ((_a = row[1][LnadHeaders.ADDRESS]) === null || _a === void 0 ? void 0 : _a.toString().toLocaleUpperCase().indexOf(keywords.toLocaleUpperCase())) > -1;
-                    }));
-                    var landUsageList = (_k = row[1][LnadHeaders.LNAD_USAGE]) === null || _k === void 0 ? void 0 : _k.toString().split(',');
-                    // andConditionList.push(objectPattern.includes(row[1][LnadHeaders.LNAD_USAGE]?.toString()))
-                    andConditionList.push(objectPattern.some(function (pattern) {
-                        return landUsageList.includes(pattern);
-                    }));
-                    if (roadNearbyRange && roadNearbyRange.length > 1) {
-                        andConditionList.push(row[1][LnadHeaders.ROAD_NEARBY] >= roadNearbyRange[0] && row[1][LnadHeaders.ROAD_NEARBY] <= roadNearbyRange[1]);
-                    }
-                    if (valuationFrom > 0) {
-                        andConditionList.push(row[1][LnadHeaders.VALUATION] >= valuationFrom);
-                    }
-                    if (valuationTo > 0) {
-                        andConditionList.push(row[1][LnadHeaders.VALUATION] <= valuationTo);
-                    }
-                    if (landSizeFrom > 0) {
-                        andConditionList.push(row[1][LnadHeaders.LAND_SIZE] >= landSizeFrom);
-                    }
-                    if (landSizeTo > 0) {
-                        andConditionList.push(row[1][LnadHeaders.LAND_SIZE] <= landSizeTo);
-                    }
-                    // if(waterSupply !== '') {
-                    //     let matchCondition = waterSupply === '1';
-                    //     console.log(`matchCondition:${matchCondition}`)
-                    //     console.log(`WATER_ELECTRICITY_SUPPLY:${row[1][LnadHeaders.WATER_ELECTRICITY_SUPPLY]?.toString().trim()}`)
-                    //     console.log(`WATER_ELECTRICITY_SUPPLY:${row[1][LnadHeaders.WATER_ELECTRICITY_SUPPLY]?.toString().trim() !== ''}`)
-                    //     andConditionList.push((row[1][LnadHeaders.WATER_ELECTRICITY_SUPPLY]?.toString().trim() !== '') == matchCondition)
-                    // }
-                    // andConditionList.push(row[1][LnadHeaders.WATER_ELECTRICITY_SUPPLY]?.toString().indexOf(waterSupply) > -1)
-                    andConditionList.push(((_l = row[1][LnadHeaders.DIRECTION]) === null || _l === void 0 ? void 0 : _l.toString().indexOf(direction)) > -1);
-                    if (objectWidthFrom > 0) {
-                        andConditionList.push(row[1][LnadHeaders.WIDTH] >= objectWidthFrom);
-                    }
-                    if (objectWidthTo > 0) {
-                        andConditionList.push(row[1][LnadHeaders.WIDTH] <= objectWidthTo);
-                    }
-                    andConditionList.push(((_m = row[1][LnadHeaders.CONTACT_PERSON]) === null || _m === void 0 ? void 0 : _m.toString().indexOf(contactPerson)) > -1);
-                    break;
-                default:
-            }
-            andConditionList.forEach(function (value, index) {
-                console.log("".concat(sheetName, ":").concat(index, " ").concat(value));
-            });
-            var orCondition = orConditionList.some(Boolean);
-            console.log("orCondition:".concat(orCondition));
-            return andConditionList.every(Boolean) && orCondition;
-        });
-        filteredValues = filteredValues.set(currentSheet.getName(), currentfilteredValues);
-    };
-    var currentfilteredValues;
-    for (var _i = 0, listOfSheet_1 = listOfSheet; _i < listOfSheet_1.length; _i++) {
-        var currentSheet = listOfSheet_1[_i];
-        _loop_1(currentSheet);
-    }
-    console.log("filteredValues.size:".concat(filteredValues.size));
-    var extractedData = [];
-    Array.from(filteredValues).map(function (_a) {
-        var key = _a[0], filteredData = _a[1];
-        console.log("key:".concat(key, ", filteredData.length:").concat(filteredData.length));
-        var temp = filteredData.map(function (row) {
-            var data = {};
-            switch (key.toUpperCase()) {
-                case 'BUILDING':
-                    data = {
-                        objectType: key,
-                        sequenceNumberInSheet: row[0],
-                        objectNumber: row[1][BuildingHeaders.OBJECT_NUMBER],
-                        objectName: row[1][BuildingHeaders.OBJECT_NAME],
-                        valuation: row[1][BuildingHeaders.VALUATION],
-                        landSize: row[1][BuildingHeaders.LAND_SIZE],
-                        buildingSize: row[1][BuildingHeaders.BUILDING_SIZE],
-                        housePattern: row[1][BuildingHeaders.HOUSE_PATTERN],
-                        position: row[1][BuildingHeaders.POSITION],
-                        location: row[1][BuildingHeaders.LOCATION],
-                        address: row[1][BuildingHeaders.ADDRESS],
-                        pictureLink: row[1][BuildingHeaders.PICTURE_LINK]
-                    };
-                    break;
-                case 'LAND':
-                    data = {
-                        objectType: key,
-                        sequenceNumberInSheet: row[0],
-                        objectNumber: row[1][LnadHeaders.OBJECT_NUMBER],
-                        objectName: row[1][LnadHeaders.OBJECT_NAME],
-                        valuation: row[1][LnadHeaders.VALUATION],
-                        landSize: row[1][LnadHeaders.LAND_SIZE],
-                        buildingSize: 0,
-                        housePattern: "",
-                        position: row[1][LnadHeaders.POSITION],
-                        location: row[1][LnadHeaders.LOCATION],
-                        address: row[1][LnadHeaders.ADDRESS],
-                        pictureLink: row[1][LnadHeaders.PICTURE_LINK]
-                    };
-                    break;
-                default:
-                    break;
-            }
-            //console.log(data)
-            return data;
-        });
-        // console.log(temp)
-        extractedData = extractedData.concat(temp);
+    
+    const headers = data.table.cols.map(col => col.label);
+    const rows = data.table.rows.map(row => {
+        const values = row.c.map(cell => (cell && cell.v !== undefined) ? cell.v : null);
+        return values;
     });
-    // console.log("BuildingHeaders[0]:" + BuildingHeaders[0])
-    // console.log(extractedData)
+    
+    return { headers, rows };
+}
+
+
+function searchObjects(contractType, objectType, objectPattern, objectNmae, valuationFrom, valuationTo, landSizeFrom, landSizeTo, roadNearby, roomFrom, roomTo, isHasParkingSpace, buildingAgeFrom, buildingAgeTo, direction, objectWidthFrom, objectWidthTo, contactPerson) {
+    
+    var listOfSheet = new Array();
+    var sheetNames = [];
+    
+    // 判斷要查詢哪些工作表
+    if (objectType.toUpperCase() === 'BUILDING' || objectType.toUpperCase() === 'LAND') {
+        sheetNames.push(objectType);
+    } else {
+        // 如果沒有指定類型，則搜尋目標檔案中的所有工作表 (這裡只考慮 Building 和 Land)
+        sheetNames = ['Building', 'Land'];
+    }
+    
+    var extractedData = [];
+
+    // GQL 查詢邏輯取代了原有的 for 迴圈和 filter
+    sheetNames.forEach(sheetName => {
+        const currentSheet = DATA_SPREADSHEET.getSheetByName(sheetName);
+        if (!currentSheet) return;
+
+        // 🚨 重要：您必須手動在這裡填入 Building 和 Land 工作表的 GID
+        // GID 可在 Sheet 網址中找到 (例如: .../edit#gid=0)
+        const SHEET_GIDS = { 'BUILDING': 'YOUR_BUILDING_GID', 'LAND': 'YOUR_LAND_GID' }; 
+        const GID = SHEET_GIDS[sheetName.toUpperCase()];
+
+        if (!GID) return;
+
+        // 構建 GQL 查詢語句
+        // 假設 GQL 查詢所有欄位 (A, B, C...)
+        let query = 'SELECT * WHERE 1=1'; 
+        
+        // 為了避免過於複雜，這裡只示範 Valuation 的條件，您需要根據您的 Header 調整欄位字母
+        // 假設 Valuation 是 K 欄 (BuildingHeaders.VALUATION=10 -> K 欄)
+        const VALUATION_COL = String.fromCharCode('A'.charCodeAt(0) + BuildingHeaders.VALUATION); // K
+        
+        if (valuationFrom > 0) {
+            query += ` AND ${VALUATION_COL} >= ${valuationFrom}`;
+        }
+        if (valuationTo > 0) {
+            query += ` AND ${VALUATION_COL} <= ${valuationTo}`;
+        }
+        
+        // ... (在這裡加入其他所有篩選條件，轉換為 GQL 語法，例如：AND L >= ${landSizeFrom}) ...
+        
+        // 4. 執行查詢
+        const GQL_URL = `https://docs.google.com/spreadsheets/d/${DATA_SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
+        const finalUrl = `${GQL_URL}&tq=${encodeURIComponent(query)}`;
+
+        try {
+            const response = UrlFetchApp.fetch(finalUrl).getContentText();
+            const { headers, rows } = parseGqlResponse(response);
+            
+            // 5. 解析資料並轉換為您預期的格式
+            const temp = rows.map((row, index) => {
+                let data = {};
+                let headerMap = sheetName.toUpperCase() === 'BUILDING' ? BuildingHeaders : LnadHeaders;
+
+                data = {
+                    objectType: sheetName,
+                    // GQL 返回的資料沒有 sequenceNumberInSheet，這裡必須回傳 -1 或其他預設值
+                    sequenceNumberInSheet: index + 1, 
+                    objectNumber: row[headerMap.OBJECT_NUMBER],
+                    objectName: row[headerMap.OBJECT_NAME],
+                    valuation: row[headerMap.VALUATION],
+                    landSize: row[headerMap.LAND_SIZE],
+                    buildingSize: sheetName.toUpperCase() === 'BUILDING' ? row[headerMap.BUILDING_SIZE] : 0,
+                    housePattern: sheetName.toUpperCase() === 'BUILDING' ? row[headerMap.HOUSE_PATTERN] : "",
+                    position: row[headerMap.POSITION],
+                    location: row[headerMap.LOCATION],
+                    address: row[headerMap.ADDRESS],
+                    pictureLink: row[headerMap.PICTURE_LINK]
+                };
+                return data;
+            });
+            extractedData = extractedData.concat(temp);
+
+        } catch (e) {
+            console.error(`GQL 查詢錯誤 (${sheetName}): ` + e.toString());
+        }
+    });
+
+    console.log("extractedData.length:".concat(extractedData.length));
     return JSON.stringify(extractedData);
 }
+
 function getAllPositions() {
-    var buildingSheet = SpreadsheetApp.getActive().getSheetByName('Building');
-    var landSheet = SpreadsheetApp.getActive().getSheetByName('Land');
+    // 導入 CacheService
+    const CACHE_KEY = 'all_object_positions';
+    const CACHE_EXPIRATION_SECONDS = 900; // 15 分鐘
+    const cache = CacheService.getScriptCache();
+    const cachedPositions = cache.get(CACHE_KEY);
+
+    if (cachedPositions) {
+        console.log("Returning positions from cache.");
+        return JSON.parse(cachedPositions);
+    }
+    
+    // 執行原有邏輯 (讀取資料)
+    var buildingSheet = DATA_SPREADSHEET.getSheetByName('Building');
+    var landSheet = DATA_SPREADSHEET.getSheetByName('Land');
     var buildingDataRange = buildingSheet === null || buildingSheet === void 0 ? void 0 : buildingSheet.getDataRange();
     var landDataRange = landSheet === null || landSheet === void 0 ? void 0 : landSheet.getDataRange();
     var buildingValues = buildingDataRange === null || buildingDataRange === void 0 ? void 0 : buildingDataRange.getValues();
@@ -627,6 +537,10 @@ function getAllPositions() {
             return objectMapData;
         }));
     }
+    
+    // 將結果存入快取
+    cache.put(CACHE_KEY, JSON.stringify(positions), CACHE_EXPIRATION_SECONDS);
+    
     return positions;
 }
 var BuildingObjectData = /** @class */ (function () {
@@ -646,15 +560,18 @@ var ObjectMapData = /** @class */ (function () {
 }());
 function searchLastNumOfNumberedObjects(objectType) {
     var listOfSheet = new Array();
+    
+    // 修正: 透過 DATA_SPREADSHEET 取得目標 Sheet，而非 getActive()
     if (objectType.toUpperCase() === 'BUILDING' || objectType.toUpperCase() === 'LAND') {
-        var currentSheet = SpreadsheetApp.getActive().getSheetByName(objectType);
+        var currentSheet = DATA_SPREADSHEET.getSheetByName(objectType);
         if (currentSheet) {
             listOfSheet.push(currentSheet);
         }
+    } else {
+        // 取得目標檔案中的所有工作表
+        listOfSheet = DATA_SPREADSHEET.getSheets();
     }
-    else {
-        listOfSheet = SpreadsheetApp.getActive().getSheets();
-    }
+
     // if object type is building, then the rule of object number is a 'A' + last number of numbered objects plus 1
     // if object type is land, then the rule of object number is a 'B' + last number of numbered objects plus 1
     var objectNumberPrefix = '';
