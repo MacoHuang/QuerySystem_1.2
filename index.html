@@ -51,52 +51,6 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-12">
-                                        <div class="mt-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern1" value="公寓" />
-                                                <label class="form-check-label" for="objectPattern1">公寓</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern2" value="大樓" />
-                                                <label class="form-check-label" for="objectPattern2">大樓</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern3" value="透天" />
-                                                <label class="form-check-label " for="objectPattern3">透天</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern6" value="別墅" />
-                                                <label class="form-check-label" for="objectPattern6">別墅</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern7" value="農舍" />
-                                                <label class="form-check-label" for="objectPattern7">農舍</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern8" value="廠辦" />
-                                                <label class="form-check-label" for="objectPattern8">廠辦</label>
-                                            </div>    
-                                        </div>
-                                        <div class="mt-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern9" value="建地" />
-                                                <label class="form-check-label" for="objectPattern9">建地</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern10" value="農地" />
-                                                <label class="form-check-label" for="objectPattern10">農地</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern11" value="工業地" />
-                                                <label class="form-check-label" for="objectPattern11">工業地</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern12" value="土地" />
-                                                <label class="form-check-label" for="objectPattern12">特殊土地</label>
-                                            </div>                                                                                        
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
                                         <label class="form-label">總價(萬)/租金(元)</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="valuationFrom" placeholder="最小值">
@@ -111,6 +65,21 @@
                                             <span class="input-group-text">~</span>
                                             <input type="text" class="form-control" id="landSizeTo" placeholder="最大值">
                                         </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-12">
+                                        <label for="contractType" class="form-label">合約類型</label>
+                                        <select class="form-select" id="contractType">
+                                            <option value="">全部</option>
+                                            <option value="口頭約">口頭約</option>
+                                            <option value="一般約">一般約</option>
+                                            <option value="專任約">專任約</option>
+                                            <option value="同行轉拋">同行轉拋</option>
+                                            <option value="租賃">租賃</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-12">
+                                        <label for="contactPeron" class="form-label">開發業務</label>
+                                        <input type="text" class="form-control" id="contactPeron" placeholder="輸入業務姓名">
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-12">
                                         <!-- <label for="searchBtn" class="form-label">&nbsp;</label> -->
@@ -185,21 +154,6 @@
                                             <option value="座西南朝東北">座西南朝東北</option>
                                         </select>
                                     </div>                                    
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="contractType" class="form-label">合約類型</label>
-                                        <select class="form-select" id="contractType">
-                                            <option value="">全部</option>
-                                            <option value="口頭約">口頭約</option>
-                                            <option value="一般約">一般約</option>
-                                            <option value="專任約">專任約</option>
-                                            <option value="同行轉拋">同行轉拋</option>
-                                            <option value="租賃">租賃</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="contactPeron" class="form-label">開發業務</label>
-                                        <input type="text" class="form-control" id="contactPeron" placeholder="輸入業務姓名">
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -251,6 +205,7 @@
             });
         });
         dataTable = new DataTable('#searchObjectTable', {
+            pageLength: 25,
             pagingType: "full_numbers",
             processing: true,
             reponsive: true,
