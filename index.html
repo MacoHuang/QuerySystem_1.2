@@ -113,6 +113,17 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-12">
+                                        <label for="contractType" class="form-label">合約類型</label>
+                                        <select class="form-select" id="contractType">
+                                            <option value="">全部</option>
+                                            <option value="口頭約">口頭約</option>
+                                            <option value="一般約">一般約</option>
+                                            <option value="專任約">專任約</option>
+                                            <option value="同行轉拋">同行轉拋</option>
+                                            <option value="租賃">租賃</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-12">
                                         <!-- <label for="searchBtn" class="form-label">&nbsp;</label> -->
                                     </div>
                                 </div>
@@ -186,17 +197,6 @@
                                         </select>
                                     </div>                                    
                                     <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="contractType" class="form-label">合約類型</label>
-                                        <select class="form-select" id="contractType">
-                                            <option value="">全部</option>
-                                            <option value="口頭約">口頭約</option>
-                                            <option value="一般約">一般約</option>
-                                            <option value="專任約">專任約</option>
-                                            <option value="同行轉拋">同行轉拋</option>
-                                            <option value="租賃">租賃</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
                                         <label for="contactPeron" class="form-label">開發業務</label>
                                         <input type="text" class="form-control" id="contactPeron" placeholder="輸入業務姓名">
                                     </div>
@@ -251,6 +251,7 @@
             });
         });
         dataTable = new DataTable('#searchObjectTable', {
+            pageLength: 25,
             pagingType: "full_numbers",
             processing: true,
             reponsive: true,
