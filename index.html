@@ -296,8 +296,8 @@
                     responsivePriority: 1,
                     render: function(data, type, row) {
                         var html = "";
-                        var infoBtn = $("<button>").addClass("btn btn-sm btn-info text-white").text(" 詳細 ").append($("<i>").addClass("fa fa-pencil")).attr("onclick", "showObjectInfo('" + row.objectType + "', '" + data + "')");
-                        var chooseA4Btn = $("<button>").addClass("btn btn-sm btn-dark text-white").text(" 文件 ").append($("<i>").addClass("fa fa-file-text-o")).attr("onclick", "showDocInfo('" + row.objectType + "', '" + data + "')");
+                        var infoBtn = $("<button>").addClass("btn btn-sm btn-info text-white").text(" 詳細 ").append($("<i>").addClass("fa fa-pencil")).attr("onclick", "showObjectInfo('" + row.objectType + "', '" + row.objectNumber + "')");
+                        var chooseA4Btn = $("<button>").addClass("btn btn-sm btn-dark text-white").text(" 文件 ").append($("<i>").addClass("fa fa-file-text-o")).attr("onclick", "showDocInfo('" + row.objectType + "', '" + row.objectNumber + "')");
 
                         var btn_list = {};
                         btn_list[0] = infoBtn;
