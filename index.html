@@ -93,65 +93,67 @@
 
         <!-- Advanced Search Card -->
         <div class="card">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="fa fa-sliders"></i> 進階條件</h5>
+            <div class="card-header bg-secondary text-white" id="advanced-search-header" data-bs-toggle="collapse" data-bs-target="#advanced-search-body" aria-expanded="false" aria-controls="advanced-search-body" style="cursor: pointer;">
+                <h5 class="mb-0"><i class="fa fa-sliders"></i> 進階條件 <i class="fa fa-chevron-down float-end"></i></h5>
             </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-lg-2 col-md-6">
-                        <label for="roadNearby" class="form-label">臨路米數</label>
-                        <select class="form-select" id="roadNearby">
-                            <option value="">不限</option>
-                            <option value="0|4.9">~ 5米</option>
-                            <option value="5|7.9">5 ~ 8米</option>
-                            <option value="8|999">8米以上</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <label for="objectWidth" class="form-label">面寬</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="objectWidthFrom" placeholder="最小">
-                            <span class="input-group-text">~</span>
-                            <input type="number" class="form-control" id="objectWidthTo" placeholder="最大">
+            <div id="advanced-search-body" class="collapse">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-2 col-md-6">
+                            <label for="roadNearby" class="form-label">臨路米數</label>
+                            <select class="form-select" id="roadNearby">
+                                <option value="">不限</option>
+                                <option value="0|4.9">~ 5米</option>
+                                <option value="5|7.9">5 ~ 8米</option>
+                                <option value="8|999">8米以上</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <label class="form-label">房數</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="roomFrom" placeholder="最少">
-                            <span class="input-group-text">~</span>
-                            <input type="number" class="form-control" id="roomTo" placeholder="最多">
+                        <div class="col-lg-3 col-md-6">
+                            <label for="objectWidth" class="form-label">面寬</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="objectWidthFrom" placeholder="最小">
+                                <span class="input-group-text">~</span>
+                                <input type="number" class="form-control" id="objectWidthTo" placeholder="最大">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6">
-                        <label for="isHasParkingSpace" class="form-label">停車位</label>
-                        <select class="form-select" id="isHasParkingSpace">
-                            <option value="">不限</option>
-                            <option value="0">無</option>
-                            <option value="1">有</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-6">
-                        <label class="form-label">建物完成年</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="buildingAgeFrom" placeholder="最早">
-                            <span class="input-group-text">~</span>
-                            <input type="text" class="form-control" id="buildingAgeTo" placeholder="最晚">
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label">房數</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="roomFrom" placeholder="最少">
+                                <span class="input-group-text">~</span>
+                                <input type="number" class="form-control" id="roomTo" placeholder="最多">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6">
-                        <label for="direction" class="form-label">座向</label>
-                        <select class="form-select" id="direction">
-                            <option value="">不限</option>
-                            <option value="座東朝西">座東朝西</option>
-                            <option value="座西朝東">座西朝東</option>
-                            <option value="座南朝北">座南朝北</option>
-                            <option value="座北朝南">座北朝南</option>
-                            <option value="座東北朝西南">座東北朝西南</option>
-                            <option value="座東南朝西北">座東南朝西北</option>
-                            <option value="座西北朝東南">座西北朝東南</option>
-                            <option value="座西南朝東北">座西南朝東北</option>
-                        </select>
+                        <div class="col-lg-2 col-md-6">
+                            <label for="isHasParkingSpace" class="form-label">停車位</label>
+                            <select class="form-select" id="isHasParkingSpace">
+                                <option value="">不限</option>
+                                <option value="0">無</option>
+                                <option value="1">有</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="form-label">建物完成年</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="buildingAgeFrom" placeholder="最早">
+                                <span class="input-group-text">~</span>
+                                <input type="text" class="form-control" id="buildingAgeTo" placeholder="最晚">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label for="direction" class="form-label">座向</label>
+                            <select class="form-select" id="direction">
+                                <option value="">不限</option>
+                                <option value="座東朝西">座東朝西</option>
+                                <option value="座西朝東">座西朝東</option>
+                                <option value="座南朝北">座南朝北</option>
+                                <option value="座北朝南">座北朝南</option>
+                                <option value="座東北朝西南">座東北朝西南</option>
+                                <option value="座東南朝西北">座東南朝西北</option>
+                                <option value="座西北朝東南">座西北朝東南</option>
+                                <option value="座西南朝東北">座西南朝東北</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,7 +218,8 @@
                         if(row.pictureLink != '' && row.pictureLink != null){
                             pictureLinkBtn = '<a style="color:black" class="m-2" href="' + row.pictureLink + '" target="_blank"><i class="fa fa-picture-o"></i></a>';
                         }
-                        return row.objectNumber + ' ' + data + pictureLinkBtn;
+                        var objectNumberPrefix = row.objectNumber ? row.objectNumber + ' ' : '';
+                        return objectNumberPrefix + data + pictureLinkBtn;
                     }
 
                 },
