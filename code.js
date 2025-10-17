@@ -531,7 +531,7 @@ function searchObjects(contractType, objectType, objectPattern, objectName, valu
 function getAllPositions() {
     // 導入 CacheService
     const CACHE_KEY = 'all_object_positions';
-    const CACHE_EXPIRATION_SECONDS = 900; // 15 分鐘
+    const CACHE_EXPIRATION_SECONDS = 7200; // 2 小時
     const cache = CacheService.getScriptCache();
     const cachedPositions = cache.get(CACHE_KEY);
 

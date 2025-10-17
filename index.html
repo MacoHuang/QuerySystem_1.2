@@ -33,10 +33,15 @@
         #searchObjectTable_wrapper .dt-length, #searchObjectTable_wrapper .dt-info, #searchObjectTable_wrapper .dt-paging {
             padding: 0.5rem 0;
         }
+        /* Custom container width */
+        .container {
+            width: 80%;
+            max-width: none; /* Override Bootstrap's max-width */
+        }
     </style>
 </head>
 <body>
-    <div class="container-fluid py-3">
+    <div class="container py-3">
         <!-- Main Search Card -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
@@ -44,17 +49,63 @@
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-3 col-md-6">
                         <label for="objectName" class="form-label">案名 / 區域 / 地址</label>
                         <input type="text" class="form-control" id="objectName" placeholder="關鍵字 (空格可複選)">
                     </div>
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-lg-3 col-md-6">
                         <label for="objectType" class="form-label">物件類型</label>
                         <select class="form-select" id="objectType">
                             <option value="">全部類型</option>
                             <option value="Building">建物</option>
                             <option value="Land">土地</option>
                         </select>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-10">
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern1" value="公寓" />
+                                 <label class="form-check-label" for="objectPattern1">公寓</label>
+                            </div>
+                             <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern2" value="大樓" />
+                                <label class="form-check-label" for="objectPattern2">大樓</label>
+                            </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern3" value="透天" />
+                                    <label class="form-check-label " for="objectPattern3">透天</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern6" value="別墅" />
+                                    <label class="form-check-label" for="objectPattern6">別墅</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern7" value="農舍" />
+                                    <label class="form-check-label" for="objectPattern7">農舍</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input objectPattern objectPattern-building" type="checkbox" id="objectPattern8" value="廠辦" />
+                                    <label class="form-check-label" for="objectPattern8">廠辦</label>
+                                </div>    
+                        </div>
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern9" value="建地" />
+                                <label class="form-check-label" for="objectPattern9">建地</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern10" value="農地" />
+                                <label class="form-check-label" for="objectPattern10">農地</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern11" value="工業地" />
+                                <label class="form-check-label" for="objectPattern11">工業地</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input objectPattern objectPattern-land" type="checkbox" id="objectPattern12" value="土地" />
+                                <label class="form-check-label" for="objectPattern12">特殊土地</label>
+                            </div>                                                                                        
+                        </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label class="form-label">總價(萬) / 租金(元)</label>
@@ -72,7 +123,7 @@
                             <input type="number" class="form-control" id="landSizeTo" placeholder="最大">
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-lg-3 col-md-6">
                         <label for="contractType" class="form-label">合約類型</label>
                         <select class="form-select" id="contractType">
                             <option value="">全部</option>
@@ -83,7 +134,7 @@
                             <option value="租賃">租賃</option>
                         </select>
                     </div>
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-lg-3 col-md-6">
                         <label for="contactPeron" class="form-label">開發業務</label>
                         <input type="text" class="form-control" id="contactPeron" placeholder="輸入姓名">
                     </div>
