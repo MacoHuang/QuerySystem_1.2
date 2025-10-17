@@ -50,18 +50,18 @@ function doGet(request) {
             return template.evaluate().addMetaTag('viewport', 'width=device-width, initial-scale=1.0');
     }
 }
-function showObjectInfo(objectType, sequenceNumberInSheet) {
+function showObjectInfo(objectType, objectNumber) {
     switch (objectType.toUpperCase()) {
         case 'BUILDING':
             var template = HtmlService.createTemplateFromFile('buildingInfo');
-            var dataString = searchObjectInfo(objectType, sequenceNumberInSheet);
+            var dataString = searchObjectInfo(objectType, objectNumber);
             var buildingObject = JSON.parse(dataString);
             template.buildingObject = buildingObject;
             console.log(JSON.stringify(buildingObject));
             return template.evaluate().getContent();
         case 'LAND':
             var landTemplate = HtmlService.createTemplateFromFile('landInfo');
-            var landDataString = searchObjectInfo(objectType, sequenceNumberInSheet);
+            var landDataString = searchObjectInfo(objectType, objectNumber);
             var landObject = JSON.parse(landDataString);
             landTemplate.landObject = landObject;
             console.log(JSON.stringify(landObject));
@@ -69,37 +69,50 @@ function showObjectInfo(objectType, sequenceNumberInSheet) {
     }
     return "";
 }
-function showObjectA4Info(objectType, sequenceNumberInSheet) {
+function showObjectA4Info(objectType, objectNumber) {
     switch (objectType.toUpperCase()) {
         case 'BUILDING':
-            // const buildingTemplate = HtmlService.createTemplateFromFile('buildingA4')
-            var dataString = searchObjectInfo(objectType, sequenceNumberInSheet);
+            var dataString = searchObjectInfo(objectType, objectNumber);
             var buildingObject = JSON.parse(dataString);
-            // buildingTemplate.buildingObject = buildingObject
-            // console.log(JSON.stringify(buildingObject))
             return createContract(objectType, buildingObject);
-        // return buildingTemplate.evaluate()
         case 'LAND':
-            // const landTemplate = HtmlService.createTemplateFromFile('landA4')
-            var landDataString = searchObjectInfo(objectType, sequenceNumberInSheet);
+            var landDataString = searchObjectInfo(objectType, objectNumber);
             var landObject = JSON.parse(landDataString);
-            // landTemplate.landObject = landObject
-            // console.log(JSON.stringify(landObject))
             return createContract(objectType, landObject);
-        // return landTemplate.evaluate()
     }
     return "";
 }
-function searchObjectInfo(objectType, sequenceNumberInSheet) {
-    // 修正: 透過 DATA_SPREADSHEET 取得 Sheet，而非 getActive()
-    var currentSheet = DATA_SPREADSHEET.getSheetByName(objectType);
-    var dataRange = currentSheet === null || currentSheet === void 0 ? void 0 : currentSheet.getDataRange();
-    var values = dataRange === null || dataRange === void 0 ? void 0 : dataRange.getValues();
-    var headers = values === null || values === void 0 ? void 0 : values.shift();
-    var row = values === null || values === void 0 ? void 0 : values.find(function (row) {
-        return values.indexOf(row) === sequenceNumberInSheet - 1;
-    });
-    console.log("row:".concat(row));
+function searchObjectInfo(objectType, objectNumber) {
+    const currentSheet = DATA_SPREADSHEET.getSheetByName(objectType);
+    if (!currentSheet) return "";
+
+    const GID = currentSheet.getSheetId();
+    if (GID === null || GID === undefined) return "";
+
+    const isBuilding = objectType.toUpperCase() === 'BUILDING';
+    const Headers = isBuilding ? BuildingHeaders : LnadHeaders;
+
+    const objectNumberCol = toGqlCol(Headers.OBJECT_NUMBER);
+    const query = `SELECT * WHERE ${objectNumberCol} = '${objectNumber}'`;
+
+    const GQL_URL = `https://docs.google.com/spreadsheets/d/${DATA_SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
+    const finalUrl = `${GQL_URL}&tq=${encodeURIComponent(query)}`;
+
+    let row;
+    try {
+        const responseText = UrlFetchApp.fetch(finalUrl, { headers: { 'Authorization': 'Bearer ' + ScriptApp.getOAuthToken() } }).getContentText();
+        const { headers, rows } = parseGqlResponse(responseText);
+
+        if (!rows || rows.length === 0) {
+            console.error(`Object not found via GQL: ${objectType} - ${objectNumber}`);
+            return "";
+        }
+        row = rows[0];
+    } catch (e) {
+        console.error(`GQL Error in searchObjectInfo for ${objectNumber}: ` + e.toString());
+        return "";
+    }
+
     if (!row) {
         return "";
     }
@@ -352,16 +365,7 @@ var LnadHeaders;
 })(LnadHeaders || (LnadHeaders = {}));
 
 /**
- * 輔助函數：將 GQL 欄位索引 (A, B, C...) 轉換為您的 Headers 列舉索引 (0, 1, 2...)
- * 警告：GQL 始終從 A 欄開始，因此這是一個基於零的索引映射
- */
-function getColumnIndex(columnLetter) {
-    const charCode = columnLetter.toUpperCase().charCodeAt(0);
-    return charCode - 'A'.charCodeAt(0);
-}
-
-/**
- * 輔助函數：解析 GQL 傳回的特殊 JSON 格式
+ * 輔助函數：將 GQL 傳回的特殊 JSON 格式
  */
 function parseGqlResponse(response) {
     const json = response.substring(response.indexOf('{'), response.lastIndexOf('}') + 1);
@@ -379,85 +383,144 @@ function parseGqlResponse(response) {
     return { headers, rows };
 }
 
+/**
+ * 輔助函數：將基於 0 的欄位索引轉換為 GQL 的欄位字母 (例如 0 -> A, 1 -> B)
+ */
+function toGqlCol(index) {
+    return String.fromCharCode('A'.charCodeAt(0) + index);
+}
 
-function searchObjects(contractType, objectType, objectPattern, objectNmae, valuationFrom, valuationTo, landSizeFrom, landSizeTo, roadNearby, roomFrom, roomTo, isHasParkingSpace, buildingAgeFrom, buildingAgeTo, direction, objectWidthFrom, objectWidthTo, contactPerson) {
+function searchObjects(contractType, objectType, objectPattern, objectName, valuationFrom, valuationTo, landSizeFrom, landSizeTo, roadNearby, roomFrom, roomTo, isHasParkingSpace, buildingAgeFrom, buildingAgeTo, direction, objectWidthFrom, objectWidthTo, contactPerson) {
     
-    var listOfSheet = new Array();
     var sheetNames = [];
     
     // 判斷要查詢哪些工作表
-    if (objectType.toUpperCase() === 'BUILDING' || objectType.toUpperCase() === 'LAND') {
+    if (objectType && (objectType.toUpperCase() === 'BUILDING' || objectType.toUpperCase() === 'LAND')) {
         sheetNames.push(objectType);
     } else {
-        // 如果沒有指定類型，則搜尋目標檔案中的所有工作表 (這裡只考慮 Building 和 Land)
+        // 如果沒有指定類型，則搜尋全部
         sheetNames = ['Building', 'Land'];
     }
     
     var extractedData = [];
 
-    // GQL 查詢邏輯取代了原有的 for 迴圈和 filter
     sheetNames.forEach(sheetName => {
         const currentSheet = DATA_SPREADSHEET.getSheetByName(sheetName);
         if (!currentSheet) return;
 
-        // 🚨 重要：您必須手動在這裡填入 Building 和 Land 工作表的 GID
-        // GID 可在 Sheet 網址中找到 (例如: .../edit#gid=0)
-        const SHEET_GIDS = { 'BUILDING': 'YOUR_BUILDING_GID', 'LAND': 'YOUR_LAND_GID' }; 
-        const GID = SHEET_GIDS[sheetName.toUpperCase()];
+        const GID = currentSheet.getSheetId(); // 動態取得 GID
+        if (GID === null || GID === undefined) return;
 
-        if (!GID) return;
-
-        // 構建 GQL 查詢語句
-        // 假設 GQL 查詢所有欄位 (A, B, C...)
-        let query = 'SELECT * WHERE 1=1'; 
+        const isBuilding = sheetName.toUpperCase() === 'BUILDING';
+        const Headers = isBuilding ? BuildingHeaders : LnadHeaders;
+        let queryConditions = [];
         
-        // 為了避免過於複雜，這裡只示範 Valuation 的條件，您需要根據您的 Header 調整欄位字母
-        // 假設 Valuation 是 K 欄 (BuildingHeaders.VALUATION=10 -> K 欄)
-        const VALUATION_COL = String.fromCharCode('A'.charCodeAt(0) + BuildingHeaders.VALUATION); // K
-        
-        if (valuationFrom > 0) {
-            query += ` AND ${VALUATION_COL} >= ${valuationFrom}`;
+        // --- 動態建立 GQL WHERE 查詢條件 ---
+        if (contractType) {
+            queryConditions.push(`${toGqlCol(Headers.CONTRACT_TYPE)} = '${contractType}'`);
         }
-        if (valuationTo > 0) {
-            query += ` AND ${VALUATION_COL} <= ${valuationTo}`;
+
+        if (objectName) {
+            const keywords = objectName.split(' ').filter(k => k);
+            keywords.forEach(keyword => {
+                queryConditions.push(`(${toGqlCol(Headers.OBJECT_NAME)} like '%${keyword}%' or ${toGqlCol(Headers.ADDRESS)} like '%${keyword}%' or ${toGqlCol(Headers.LOCATION)} like '%${keyword}%')`);
+            });
         }
         
-        // ... (在這裡加入其他所有篩選條件，轉換為 GQL 語法，例如：AND L >= ${landSizeFrom}) ...
+        if (valuationFrom > 0) queryConditions.push(`${toGqlCol(Headers.VALUATION)} >= ${valuationFrom}`);
+        if (valuationTo > 0) queryConditions.push(`${toGqlCol(Headers.VALUATION)} <= ${valuationTo}`);
+
+        if (landSizeFrom > 0) queryConditions.push(`${toGqlCol(Headers.LAND_SIZE)} >= ${landSizeFrom}`);
+        if (landSizeTo > 0) queryConditions.push(`${toGqlCol(Headers.LAND_SIZE)} <= ${landSizeTo}`);
+
+        if (roadNearby) {
+            const [min, max] = roadNearby.split('|');
+            queryConditions.push(`(${toGqlCol(Headers.ROAD_NEARBY)} >= ${min} and ${toGqlCol(Headers.ROAD_NEARBY)} <= ${max})`);
+        }
+
+        if (objectWidthFrom > 0) queryConditions.push(`${toGqlCol(Headers.WIDTH)} >= ${objectWidthFrom}`);
+        if (objectWidthTo > 0) queryConditions.push(`${toGqlCol(Headers.WIDTH)} <= ${objectWidthTo}`);
+
+        if (direction) {
+            queryConditions.push(`${toGqlCol(Headers.DIRECTION)} = '${direction}'`);
+        }
+
+        if (contactPerson) {
+            queryConditions.push(`${toGqlCol(Headers.CONTACT_PERSON)} like '%${contactPerson}%'`);
+        }
+
+        if (objectPattern && objectPattern.length > 0) {
+            const patternCol = isBuilding ? toGqlCol(BuildingHeaders.BUILDING_TYPE) : toGqlCol(LnadHeaders.LAND_PATTERN);
+            const patternConditions = objectPattern.map(p => `${patternCol} = '${p}'`);
+            if (patternConditions.length > 0) {
+                queryConditions.push(`(${patternConditions.join(' OR ')})`);
+            }
+        }
+
+        if (isBuilding) {
+            if (isHasParkingSpace === '1') { // 有車位
+                queryConditions.push(`${toGqlCol(BuildingHeaders.VIHECLE_PARKING_TYPE)} is not null`);
+            } else if (isHasParkingSpace === '0') { // 無車位
+                queryConditions.push(`(${toGqlCol(BuildingHeaders.VIHECLE_PARKING_TYPE)} is null or ${toGqlCol(BuildingHeaders.VIHECLE_PARKING_TYPE)} = '')`);
+            }
+
+            // 建物完成年 (假設 BUILDING_AGE 欄位是年份或可按字串比較的日期)
+            if (buildingAgeFrom) queryConditions.push(`${toGqlCol(BuildingHeaders.BUILDING_AGE)} >= '${buildingAgeFrom}'`);
+            if (buildingAgeTo) queryConditions.push(`${toGqlCol(BuildingHeaders.BUILDING_AGE)} <= '${buildingAgeTo}'`);
+
+            // 房數 (格局) - 處理文字格式如 "3房2廳"
+            const roomCol = toGqlCol(BuildingHeaders.HOUSE_PATTERN);
+            let roomConditions = [];
+            if (roomFrom > 0 && roomTo > 0 && Number(roomTo) >= Number(roomFrom)) {
+                for (let i = Number(roomFrom); i <= Number(roomTo); i++) {
+                    roomConditions.push(`${roomCol} like '${i}房%'`);
+                }
+            } else if (roomFrom > 0) {
+                roomConditions.push(`${roomCol} like '${Number(roomFrom)}房%'`);
+            } else if (roomTo > 0) {
+                for (let i = 1; i <= Number(roomTo); i++) {
+                    roomConditions.push(`${roomCol} like '${i}房%'`);
+                }
+            }
+            if(roomConditions.length > 0) {
+                queryConditions.push(`(${roomConditions.join(' OR ')})`);
+            }
+        }
         
-        // 4. 執行查詢
+        let query = 'SELECT *';
+        if (queryConditions.length > 0) {
+            query += ' WHERE ' + queryConditions.join(' AND ');
+        }
+        
         const GQL_URL = `https://docs.google.com/spreadsheets/d/${DATA_SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
         const finalUrl = `${GQL_URL}&tq=${encodeURIComponent(query)}`;
 
         try {
-            const response = UrlFetchApp.fetch(finalUrl).getContentText();
+            const response = UrlFetchApp.fetch(finalUrl, { headers: { 'Authorization': 'Bearer ' + ScriptApp.getOAuthToken() } }).getContentText();
             const { headers, rows } = parseGqlResponse(response);
             
-            // 5. 解析資料並轉換為您預期的格式
-            const temp = rows.map((row, index) => {
-                let data = {};
-                let headerMap = sheetName.toUpperCase() === 'BUILDING' ? BuildingHeaders : LnadHeaders;
-
-                data = {
+            const temp = rows.map((row) => {
+                let headerMap = isBuilding ? BuildingHeaders : LnadHeaders;
+                // 回傳的資料結構
+                return {
                     objectType: sheetName,
-                    // GQL 返回的資料沒有 sequenceNumberInSheet，這裡必須回傳 -1 或其他預設值
-                    sequenceNumberInSheet: index + 1, 
+                    sequenceNumberInSheet: row[headerMap.OBJECT_NUMBER], // **重要**: 傳遞 objectNumber 以供後續查詢
                     objectNumber: row[headerMap.OBJECT_NUMBER],
                     objectName: row[headerMap.OBJECT_NAME],
                     valuation: row[headerMap.VALUATION],
                     landSize: row[headerMap.LAND_SIZE],
-                    buildingSize: sheetName.toUpperCase() === 'BUILDING' ? row[headerMap.BUILDING_SIZE] : 0,
-                    housePattern: sheetName.toUpperCase() === 'BUILDING' ? row[headerMap.HOUSE_PATTERN] : "",
+                    buildingSize: isBuilding ? row[headerMap.BUILDING_SIZE] : 0,
+                    housePattern: isBuilding ? row[headerMap.HOUSE_PATTERN] : "",
                     position: row[headerMap.POSITION],
                     location: row[headerMap.LOCATION],
                     address: row[headerMap.ADDRESS],
                     pictureLink: row[headerMap.PICTURE_LINK]
                 };
-                return data;
             });
             extractedData = extractedData.concat(temp);
 
         } catch (e) {
-            console.error(`GQL 查詢錯誤 (${sheetName}): ` + e.toString());
+            console.error(`GQL 查詢錯誤 (${sheetName}) for query "${query}": ` + e.toString());
         }
     });
 
