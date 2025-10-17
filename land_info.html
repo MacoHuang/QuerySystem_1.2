@@ -1,203 +1,150 @@
+<style>
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    .info-value {
+        padding: 0.375rem 0.75rem;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        min-height: 38px;
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+</style>
 <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-header bg-success text-white">
         <h5 class="modal-title">土地詳細資訊</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div class="modal-body">
-
-        <table class="table table-bordered table-sm table-hover">
-            <tbody>
-                <!-- <tr>
-                    <td>
-                        <label for="createTime">建立時間</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="createTime" id="createTime" value="<?!= landObject.createTime ?>">
-                    </td>
-                </tr> -->
-                <tr>
-                    <td>
-                        <label for="objectName">案名</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="objectName" id="objectName" value="<?!= landObject.objectName ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contractType">合約</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="contractType" id="contractType" value="<?!= landObject.contractType ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contractType">起訖</label>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="text"  class="form-control" name="contractDateFrom" id="contractDateFrom" value="<?!= landObject.contractDateFrom ?>">
-                            <div class="input-group-append">
-                                <span class="input-group-text"> ~ </span>
-                            </div>
-                            <input type="text"  class="form-control" name="contractDateTo" id="contractDateTo" value="<?!= landObject.contractDateTo ?>">
+    <div class="modal-body bg-light">
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">基本資訊</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">案名</div>
+                            <div class="col-8 info-value"><?!= landObject.objectName ?></div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="location">地區</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="location" id="location" value="<?!= landObject.location ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="address">地號</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="address" id="address" value="<?!= landObject.address ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="position">位置</label>
-                    </td>
-                    <td>
-                        <? if (landObject.position != null && landObject.position != "") { ?>
-                        <a href="#" onclick="openMapPosition('<?!= landObject.position ?>')"><?!= landObject.position ?>&nbsp;<i class="fa fa-map-marker" aria-hidden="true"></i></a>
-                        <? } ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="landPattern">形態</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="landPattern" id="landPattern" value="<?!= landObject.landPattern ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="landUsage">分區</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="landUsage" id="landUsage" value="<?!= landObject.landUsage ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="landType">類別</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="landType" id="landType" value="<?!= landObject.landType ?>">
-                    </td>
-                </tr>              
-                <tr>
-                    <td>
-                        <label for="valuation">開價</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="valuation" id="valuation" value="<?!= landObject.valuation ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="landSize">地坪</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="landSize" id="landSize" value="<?!= landObject.landSize ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="numberOfOwner">持分</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="numberOfOwner" id="numberOfOwner" value="<?!= landObject.numberOfOwner ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="roadNearby">臨路</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="roadNearby" id="roadNearby" value="<?!= landObject.roadNearby ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="direction">座向</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="direction" id="direction" value="<?!= landObject.direction ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="waterElectricitySupply">水電</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="waterElectricitySupply" id="waterElectricitySupply"
-                            value="<?!= landObject.waterElectricitySupply ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="width">面寬</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="width" id="width" value="<?!= landObject.width ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="depth">蹤深</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="depth" id="depth" value="<?!= landObject.depth ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="buildingCoverageRate">建蔽率</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="buildingCoverageRate" id="buildingCoverageRate"
-                            value="<?!= landObject.buildingCoverageRate ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="volumeRate">容積率</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="volumeRate" id="volumeRate" value="<?!= landObject.volumeRate ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="memo">備註</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="memo" id="memo" value="<?!= landObject.memo ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contactPerson">聯絡人</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="contactPerson" id="contactPerson" value="<?!= landObject.contactPerson ?>">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地區</div>
+                            <div class="col-8 info-value"><?!= landObject.location ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地號</div>
+                            <div class="col-8 info-value"><?!= landObject.address ?></div>
+                        </div>
+                         <div class="row align-items-center">
+                            <div class="col-4 info-label">開價(萬)</div>
+                            <div class="col-8 info-value"><?= landObject.valuation ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">土地分區與規格</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">形態</div>
+                            <div class="col-8 info-value"><?!= landObject.landPattern ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">分區</div>
+                            <div class="col-8 info-value"><?!= landObject.landUsage ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">類別</div>
+                            <div class="col-8 info-value"><?!= landObject.landType ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">建蔽率</div>
+                            <div class="col-8 info-value"><?!= landObject.buildingCoverageRate ?>%</div>
+                        </div>
+                        <div class="row align-items-center">
+                             <div class="col-4 info-label">容積率</div>
+                            <div class="col-8 info-value"><?!= landObject.volumeRate ?>%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">尺寸與座向</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地坪</div>
+                            <div class="col-8 info-value"><?!= landObject.landSize ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">面寬</div>
+                            <div class="col-8 info-value"><?!= landObject.width ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">縱深</div>
+                            <div class="col-8 info-value"><?!= landObject.depth ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">臨路</div>
+                            <div class="col-8 info-value"><?!= landObject.roadNearby ?></div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-4 info-label">座向</div>
+                            <div class="col-8 info-value"><?!= landObject.direction ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">合約資訊</div>
+                    <div class="card-body">
+                         <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">合約</div>
+                            <div class="col-8 info-value"><?!= landObject.contractType ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">起訖</div>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <span class="form-control"><?!= landObject.contractDateFrom ?></span>
+                                    <span class="input-group-text">~</span>
+                                    <span class="form-control"><?!= landObject.contractDateTo ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-4 info-label">開發業務</div>
+                            <div class="col-8 info-value"><?!= landObject.contactPerson ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Info -->
+        <div class="card">
+             <div class="card-header">其他資訊</div>
+             <div class="card-body">
+                <div class="row align-items-center mb-2">
+                    <div class="col-2 info-label">持分</div>
+                    <div class="col-4 info-value"><?!= landObject.numberOfOwner ?></div>
+                    <div class="col-2 info-label">水電</div>
+                    <div class="col-4 info-value"><?!= landObject.waterElectricitySupply ?></div>
+                </div>
+                <div class="row align-items-center mb-2">
+                    <div class="col-2 info-label">備註</div>
+                    <div class="col-10 info-value" style="min-height: 80px;"><?!= landObject.memo ?></div>
+                </div>
+             </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
     </div>
 </div>
 <script>

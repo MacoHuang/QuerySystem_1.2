@@ -16,148 +16,143 @@
             height: 100vh;
             margin-bottom: 8px;
         }
-        .form-floating-group input {
-            border-bottom-right-radius: 0;
-            border-top-right-radius: 0;
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        #searchObjectTable_wrapper .dt-length, #searchObjectTable_wrapper .dt-info, #searchObjectTable_wrapper .dt-paging {
+            padding: 0.5rem 0;
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="accordion mt-3">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panel-header1">
-                            <button class="accordion-button bg-primary-subtle " type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panel-body1" aria-expanded="true"
-                                aria-controls="panel-body1">
-                                物件查詢
-                            </button>
-                        </h2>
-                        <div id="panel-body1" class="accordion-collapse collapse show" aria-labelledby="panel-header1">
-                            <div class="accordion-body">
-                                <div class="row g-2">
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="objectName" class="form-label">案名、區域</label>
-                                        <input type="text" class="form-control" id="objectName" placeholder="關鍵字加空格可複選">
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="objectType" class="form-label">物件類型</label>
-                                        <select class="form-select" id="objectType">
-                                            <option value="">自行勾選</option>
-                                            <option value="Building">建物</option>
-                                            <option value="Land">土地</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label class="form-label">總價(萬)/租金(元)</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="valuationFrom" placeholder="最小值">
-                                            <span class="input-group-text">~</span>
-                                            <input type="text" class="form-control" id="valuationTo" placeholder="最大值">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label class="form-label">地坪</label>
-                                        <div class="input-group ">
-                                            <input type="text" class="form-control" id="landSizeFrom" placeholder="最小值">
-                                            <span class="input-group-text">~</span>
-                                            <input type="text" class="form-control" id="landSizeTo" placeholder="最大值">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="contractType" class="form-label">合約類型</label>
-                                        <select class="form-select" id="contractType">
-                                            <option value="">全部</option>
-                                            <option value="口頭約">口頭約</option>
-                                            <option value="一般約">一般約</option>
-                                            <option value="專任約">專任約</option>
-                                            <option value="同行轉拋">同行轉拋</option>
-                                            <option value="租賃">租賃</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="contactPeron" class="form-label">開發業務</label>
-                                        <input type="text" class="form-control" id="contactPeron" placeholder="輸入業務姓名">
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <!-- <label for="searchBtn" class="form-label">&nbsp;</label> -->
-                                    </div>
-                                </div>
-                            </div>
+    <div class="container-fluid py-3">
+        <!-- Main Search Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fa fa-search"></i> 物件查詢</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-4 col-md-6">
+                        <label for="objectName" class="form-label">案名 / 區域 / 地址</label>
+                        <input type="text" class="form-control" id="objectName" placeholder="關鍵字 (空格可複選)">
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label for="objectType" class="form-label">物件類型</label>
+                        <select class="form-select" id="objectType">
+                            <option value="">全部類型</option>
+                            <option value="Building">建物</option>
+                            <option value="Land">土地</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label class="form-label">總價(萬) / 租金(元)</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="valuationFrom" placeholder="最低">
+                            <span class="input-group-text">~</span>
+                            <input type="number" class="form-control" id="valuationTo" placeholder="最高">
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panel-header2">
-                            <button class="accordion-button collapsed bg-dark-subtle" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panel-body2" aria-expanded="false"
-                                aria-controls="panel-body2">
-                                進階條件
-                            </button>
-                        </h2>
-                        <div id="panel-body2" class="accordion-collapse collapse" aria-labelledby="panel-header2">
-                            <div class="accordion-body">
-                                <div class="row g-2">                                    
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="roadNearby" class="form-label">臨路</label>
-                                        <select class="form-select" id="roadNearby">
-                                            <option value="">不限</option>
-                                            <option value="0|4.9">4米內
-                                            <option value="5|6.9">5~7米</option>
-                                            <option value="8|99">8米以上</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="objectWidth" class="form-label">面寬</label>
-                                        <div class="input-group ">
-                                            <input type="text" class="form-control" id="objectWidthFrom" placeholder="最小值">
-                                            <span class="input-group-text">~</span>
-                                            <input type="text" class="form-control" id="objectWidthTo" placeholder="最大值">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label class="form-label">房數</label>
-                                        <div class="input-group ">
-                                            <input type="text" class="form-control" id="roomFrom" placeholder="最小值">
-                                            <span class="input-group-text">~</span>
-                                            <input type="text" class="form-control" id="roomTo" placeholder="最大值">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="objectType" class="form-label">停車位</label>
-                                        <select class="form-select" id="isHasParkingSpace">
-                                            <option value="">不限</option>
-                                            <option value="0">無</option>
-                                            <option value="1">有</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label class="form-label">建物完成年</label>
-                                        <div class="input-group ">
-                                            <input type="text" class="form-control" id="buildingAgeFrom" placeholder="最小值">
-                                            <span class="input-group-text">~</span>
-                                            <input type="text" class="form-control" id="buildingAgeTo" placeholder="最大值">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <label for="direction" class="form-label">座向</label>
-                                        <select class="form-select" id="direction">
-                                            <option value="">不限</option>
-                                            <option value="座東朝西">座東朝西</option>
-                                            <option value="座西朝東">座西朝東</option>
-                                            <option value="座南朝北">座南朝北</option>
-                                            <option value="座北朝南">座北朝南</option>
-                                            <option value="座東北朝西南">座東北朝西南</option>
-                                            <option value="座東南朝西北">座東南朝西北</option>
-                                            <option value="座西北朝東南">座西北朝東南</option>
-                                            <option value="座西南朝東北">座西南朝東北</option>
-                                        </select>
-                                    </div>                                    
-                                </div>
-                            </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label class="form-label">地坪</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="landSizeFrom" placeholder="最小">
+                            <span class="input-group-text">~</span>
+                            <input type="number" class="form-control" id="landSizeTo" placeholder="最大">
                         </div>
-                    </div>                    
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label for="contractType" class="form-label">合約類型</label>
+                        <select class="form-select" id="contractType">
+                            <option value="">全部</option>
+                            <option value="口頭約">口頭約</option>
+                            <option value="一般約">一般約</option>
+                            <option value="專任約">專任約</option>
+                            <option value="同行轉拋">同行轉拋</option>
+                            <option value="租賃">租賃</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label for="contactPeron" class="form-label">開發業務</label>
+                        <input type="text" class="form-control" id="contactPeron" placeholder="輸入姓名">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Search Card -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fa fa-sliders"></i> 進階條件</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-2 col-md-6">
+                        <label for="roadNearby" class="form-label">臨路米數</label>
+                        <select class="form-select" id="roadNearby">
+                            <option value="">不限</option>
+                            <option value="0|4.9">~ 5米</option>
+                            <option value="5|7.9">5 ~ 8米</option>
+                            <option value="8|999">8米以上</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label for="objectWidth" class="form-label">面寬</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="objectWidthFrom" placeholder="最小">
+                            <span class="input-group-text">~</span>
+                            <input type="number" class="form-control" id="objectWidthTo" placeholder="最大">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label class="form-label">房數</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="roomFrom" placeholder="最少">
+                            <span class="input-group-text">~</span>
+                            <input type="number" class="form-control" id="roomTo" placeholder="最多">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label for="isHasParkingSpace" class="form-label">停車位</label>
+                        <select class="form-select" id="isHasParkingSpace">
+                            <option value="">不限</option>
+                            <option value="0">無</option>
+                            <option value="1">有</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label class="form-label">建物完成年</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="buildingAgeFrom" placeholder="最早">
+                            <span class="input-group-text">~</span>
+                            <input type="text" class="form-control" id="buildingAgeTo" placeholder="最晚">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label for="direction" class="form-label">座向</label>
+                        <select class="form-select" id="direction">
+                            <option value="">不限</option>
+                            <option value="座東朝西">座東朝西</option>
+                            <option value="座西朝東">座西朝東</option>
+                            <option value="座南朝北">座南朝北</option>
+                            <option value="座北朝南">座北朝南</option>
+                            <option value="座東北朝西南">座東北朝西南</option>
+                            <option value="座東南朝西北">座東南朝西北</option>
+                            <option value="座西北朝東南">座西北朝東南</option>
+                            <option value="座西南朝東北">座西南朝東北</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

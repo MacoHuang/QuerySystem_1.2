@@ -1,208 +1,158 @@
+<style>
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    .info-value {
+        padding: 0.375rem 0.75rem;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        min-height: 38px;
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+</style>
 <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-header bg-dark text-white">
         <h5 class="modal-title">建物詳細資訊</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div class="modal-body">
-
-        <table class="table table-bordered table-sm table-hover">
-            <tbody>
-                <!-- <tr>
-                    <td>
-                        <label for="createTime">建立時間</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="createTime" id="createTime" value="<?!= buildingObject.createTime ?>">
-                    </td>
-                </tr> -->
-                <tr>
-                    <td>
-                        <label for="objectName">案名</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="objectName" id="objectName" value="<?!= buildingObject.objectName ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contractType">合約</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="contractType" id="contractType" value="<?!= buildingObject.contractType ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contractType">起訖</label>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="text"  class="form-control" name="contractDateFrom" id="contractDateFrom" value="<?!= buildingObject.contractDateFrom ?>">
-                            <div class="input-group-append">
-                                <span class="input-group-text"> ~ </span>
-                            </div>
-                            <input type="text"  class="form-control" name="contractDateTo" id="contractDateTo" value="<?!= buildingObject.contractDateTo ?>">
+    <div class="modal-body bg-light">
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">基本資訊</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">案名</div>
+                            <div class="col-8 info-value"><?!= buildingObject.objectName ?></div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="location">地區</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="location" id="location" value="<?!= buildingObject.location ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="address">地址</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="address" id="address" value="<?!= buildingObject.address ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="position">位置</label>
-                    </td>
-                    <td>
-                        <? if(buildingObject.position != null && buildingObject.position != "") { ?> 
-                        <a href="#" onclick="openMapPosition('<?!= buildingObject.position ?>')"><?!= buildingObject.position ?>&nbsp;<i class="fa fa-map-marker" aria-hidden="true"></i></a>
-                        <? } ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="buildingType">類型</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="buildingType" id="buildingType"
-                            value="<?!= buildingObject.buildingType ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="housePattern">格局</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="housePattern" id="housePattern"
-                            value="<?!= buildingObject.housePattern ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="floor">樓層</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="floor" id="floor" value="<?!= buildingObject.floor ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="valuation">開價</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="valuation" id="valuation" value="<?!= buildingObject.valuation ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="landSize">地坪</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="landSize" id="landSize" value="<?!= buildingObject.landSize ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="buildingSize">建坪</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="buildingSize" id="buildingSize"
-                            value="<?!= buildingObject.buildingSize ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="direction">座向</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="direction" id="direction" value="<?!= buildingObject.direction ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="vihecleParkingType">車位</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="vihecleParkingType" id="vihecleParkingType"
-                            value="<?!= buildingObject.vihecleParkingType ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="vihecleParkingNumber">車位號</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="vihecleParkingNumber" id="vihecleParkingNumber"
-                            value="<?!= buildingObject.vihecleParkingNumber ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="waterSupply">水電</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="waterSupply" id="waterSupply"
-                            value="<?!= buildingObject.waterSupply ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="roadNearby">臨路</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="roadNearby" id="roadNearby" value="<?!= buildingObject.roadNearby ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="width">面寬</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="width" id="width" value="<?!= buildingObject.width ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="depth">完成日</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="buildingAge" id="buildingAge" value="<?!= buildingObject.buildingAge ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="memo">備註</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="memo" id="memo" value="<?!= buildingObject.memo ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="contactPerson">聯絡人</label>
-                    </td>
-                    <td>
-                        <input type="text"  class="form-control" name="contactPerson" id="contactPerson"
-                            value="<?!= buildingObject.contactPerson ?>">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">類型</div>
+                            <div class="col-8 info-value"><?!= buildingObject.buildingType ?></div>
+                        </div>
+                         <div class="row align-items-center">
+                            <div class="col-4 info-label">開價(萬)</div>
+                            <div class="col-8 info-value"><?= buildingObject.valuation ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">位置與格局</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地區</div>
+                            <div class="col-8 info-value"><?!= buildingObject.location ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地址</div>
+                            <div class="col-8 info-value"><?!= buildingObject.address ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">格局</div>
+                            <div class="col-8 info-value"><?!= buildingObject.housePattern ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">樓層</div>
+                            <div class="col-8 info-value"><?!= buildingObject.floor ?></div>
+                        </div>
+                        <div class="row align-items-center">
+                             <div class="col-4 info-label">座向</div>
+                            <div class="col-8 info-value"><?!= buildingObject.direction ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card mb-3">
+                    <div class="card-header">車位資訊</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">車位</div>
+                            <div class="col-8 info-value"><?!= buildingObject.vihecleParkingType ?></div>
+                        </div>
+                         <div class="row align-items-center">
+                            <div class="col-4 info-label">車位號</div>
+                            <div class="col-8 info-value"><?!= buildingObject.vihecleParkingNumber ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">坪數與規格</div>
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">地坪</div>
+                            <div class="col-8 info-value"><?!= buildingObject.landSize ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">建坪</div>
+                            <div class="col-8 info-value"><?!= buildingObject.buildingSize ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">面寬</div>
+                            <div class="col-8 info-value"><?!= buildingObject.width ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">臨路</div>
+                            <div class="col-8 info-value"><?!= buildingObject.roadNearby ?></div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-4 info-label">完成日</div>
+                            <div class="col-8 info-value"><?!= buildingObject.buildingAge ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">合約資訊</div>
+                    <div class="card-body">
+                         <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">合約</div>
+                            <div class="col-8 info-value"><?!= buildingObject.contractType ?></div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-4 info-label">起訖</div>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <span class="form-control"><?!= buildingObject.contractDateFrom ?></span>
+                                    <span class="input-group-text">~</span>
+                                    <span class="form-control"><?!= buildingObject.contractDateTo ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-4 info-label">開發業務</div>
+                            <div class="col-8 info-value"><?!= buildingObject.contactPerson ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Info -->
+        <div class="card">
+             <div class="card-header">其他資訊</div>
+             <div class="card-body">
+                  <div class="row align-items-center mb-2">
+                    <div class="col-2 info-label">水電</div>
+                    <div class="col-10 info-value"><?!= buildingObject.waterSupply ?></div>
+                </div>
+                <div class="row align-items-center mb-2">
+                    <div class="col-2 info-label">備註</div>
+                    <div class="col-10 info-value" style="min-height: 80px;"><?!= buildingObject.memo ?></div>
+                </div>
+             </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
     </div>
 </div>
 <script>
