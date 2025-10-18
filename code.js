@@ -90,7 +90,7 @@ function searchObjectInfo(objectType, objectNumber) {
     if (GID === null || GID === undefined) return "";
 
     const isBuilding = objectType.toUpperCase() === 'BUILDING';
-    const Headers = isBuilding ? BuildingHeaders : LnadHeaders;
+    const Headers = isBuilding ? BuildingHeaders : LandHeaders;
 
     const objectNumberCol = toGqlCol(Headers.OBJECT_NUMBER);
     const query = `SELECT * WHERE ${objectNumberCol} = '${objectNumber}'`;
@@ -142,47 +142,39 @@ function searchObjectInfo(objectType, objectNumber) {
                 memo: row[BuildingHeaders.MEMO],
                 contactPerson: row[BuildingHeaders.CONTACT_PERSON],
                 pictureLink: row[BuildingHeaders.PICTURE_LINK],
-                contractDateFrom: formatDateString(row[LnadHeaders.CONTRACT_DATE_FROM]),
-                contractDateTo: formatDateString(row[LnadHeaders.CONTRACT_DATE_TO])
+                contractDateFrom: formatDateString(row[BuildingHeaders.CONTRACT_DATE_FROM]),
+                contractDateTo: formatDateString(row[BuildingHeaders.CONTRACT_DATE_TO])
             };
             return JSON.stringify(buildingObject);
-        // const template = HtmlService.createTemplateFromFile('buildingInfo')
-        // template.buildingObject = buildingObject
-        // console.log(JSON.stringify(buildingObject))
-        // return template.evaluate().getContent()
         case 'LAND':
             var landObject = {
-                createTime: row[LnadHeaders.CREATE_TIME],
-                objectNumber: row[LnadHeaders.OBJECT_NUMBER],
-                objectName: row[LnadHeaders.OBJECT_NAME],
-                contractType: row[LnadHeaders.CONTRACT_TYPE],
-                location: row[LnadHeaders.LOCATION],
-                landPattern: row[LnadHeaders.LAND_PATTERN],
-                landUsage: row[LnadHeaders.LNAD_USAGE],
-                landType: row[LnadHeaders.LNAD_TYPE],
-                address: row[LnadHeaders.ADDRESS],
-                position: row[LnadHeaders.POSITION],
-                valuation: row[LnadHeaders.VALUATION],
-                landSize: row[LnadHeaders.LAND_SIZE],
-                numberOfOwner: row[LnadHeaders.NUMBER_OF_OWNER],
-                roadNearby: row[LnadHeaders.ROAD_NEARBY],
-                direction: row[LnadHeaders.DIRECTION],
-                waterElectricitySupply: row[LnadHeaders.WATER_ELECTRICITY_SUPPLY],
-                width: row[LnadHeaders.WIDTH],
-                depth: row[LnadHeaders.DEEPTH],
-                buildingCoverageRate: row[LnadHeaders.BUILDING_COVERAGE_RATE],
-                volumeRate: row[LnadHeaders.VOLUME_RATE],
-                memo: row[LnadHeaders.MEMO],
-                contactPerson: row[LnadHeaders.CONTACT_PERSON],
-                pictureLink: row[LnadHeaders.PICTURE_LINK],
-                contractDateFrom: formatDateString(row[LnadHeaders.CONTRACT_DATE_FROM]),
-                contractDateTo: formatDateString(row[LnadHeaders.CONTRACT_DATE_TO])
+                createTime: row[LandHeaders.CREATE_TIME],
+                objectNumber: row[LandHeaders.OBJECT_NUMBER],
+                objectName: row[LandHeaders.OBJECT_NAME],
+                contractType: row[LandHeaders.CONTRACT_TYPE],
+                location: row[LandHeaders.LOCATION],
+                landPattern: row[LandHeaders.LAND_PATTERN],
+                landUsage: row[LandHeaders.LAND_USAGE],
+                landType: row[LandHeaders.LAND_TYPE],
+                address: row[LandHeaders.ADDRESS],
+                position: row[LandHeaders.POSITION],
+                valuation: row[LandHeaders.VALUATION],
+                landSize: row[LandHeaders.LAND_SIZE],
+                numberOfOwner: row[LandHeaders.NUMBER_OF_OWNER],
+                roadNearby: row[LandHeaders.ROAD_NEARBY],
+                direction: row[LandHeaders.DIRECTION],
+                waterElectricitySupply: row[LandHeaders.WATER_ELECTRICITY_SUPPLY],
+                width: row[LandHeaders.WIDTH],
+                depth: row[LandHeaders.DEPTH],
+                buildingCoverageRate: row[LandHeaders.BUILDING_COVERAGE_RATE],
+                volumeRate: row[LandHeaders.VOLUME_RATE],
+                memo: row[LandHeaders.MEMO],
+                contactPerson: row[LandHeaders.CONTACT_PERSON],
+                pictureLink: row[LandHeaders.PICTURE_LINK],
+                contractDateFrom: formatDateString(row[LandHeaders.CONTRACT_DATE_FROM]),
+                contractDateTo: formatDateString(row[LandHeaders.CONTRACT_DATE_TO])
             };
             return JSON.stringify(landObject);
-        // const landTemplate = HtmlService.createTemplateFromFile('landInfo')
-        // landTemplate.landObject = landObject
-        // console.log(JSON.stringify(landObject))
-        // return landTemplate.evaluate().getContent()
     }
     return "";
 }
@@ -333,36 +325,36 @@ var BuildingHeaders;
     BuildingHeaders[BuildingHeaders["CONTRACT_DATE_TO"] = 25] = "CONTRACT_DATE_TO";
     BuildingHeaders[BuildingHeaders["OBJECT_UPDATE_DATE"] = 26] = "OBJECT_UPDATE_DATE";
 })(BuildingHeaders || (BuildingHeaders = {}));
-var LnadHeaders;
-(function (LnadHeaders) {
-    LnadHeaders[LnadHeaders["CREATE_TIME"] = 0] = "CREATE_TIME";
-    LnadHeaders[LnadHeaders["OBJECT_NUMBER"] = 1] = "OBJECT_NUMBER";
-    LnadHeaders[LnadHeaders["OBJECT_NAME"] = 2] = "OBJECT_NAME";
-    LnadHeaders[LnadHeaders["CONTRACT_TYPE"] = 3] = "CONTRACT_TYPE";
-    LnadHeaders[LnadHeaders["LOCATION"] = 4] = "LOCATION";
-    LnadHeaders[LnadHeaders["LAND_PATTERN"] = 5] = "LAND_PATTERN";
-    LnadHeaders[LnadHeaders["LNAD_USAGE"] = 6] = "LNAD_USAGE";
-    LnadHeaders[LnadHeaders["LNAD_TYPE"] = 7] = "LNAD_TYPE";
-    LnadHeaders[LnadHeaders["ADDRESS"] = 8] = "ADDRESS";
-    LnadHeaders[LnadHeaders["POSITION"] = 9] = "POSITION";
-    LnadHeaders[LnadHeaders["VALUATION"] = 10] = "VALUATION";
-    LnadHeaders[LnadHeaders["LAND_SIZE"] = 11] = "LAND_SIZE";
-    LnadHeaders[LnadHeaders["NUMBER_OF_OWNER"] = 12] = "NUMBER_OF_OWNER";
-    LnadHeaders[LnadHeaders["ROAD_NEARBY"] = 13] = "ROAD_NEARBY";
-    LnadHeaders[LnadHeaders["DIRECTION"] = 14] = "DIRECTION";
-    LnadHeaders[LnadHeaders["WATER_ELECTRICITY_SUPPLY"] = 15] = "WATER_ELECTRICITY_SUPPLY";
-    LnadHeaders[LnadHeaders["WIDTH"] = 16] = "WIDTH";
-    LnadHeaders[LnadHeaders["DEEPTH"] = 17] = "DEEPTH";
-    LnadHeaders[LnadHeaders["BUILDING_COVERAGE_RATE"] = 18] = "BUILDING_COVERAGE_RATE";
-    LnadHeaders[LnadHeaders["VOLUME_RATE"] = 19] = "VOLUME_RATE";
-    LnadHeaders[LnadHeaders["MEMO"] = 20] = "MEMO";
-    LnadHeaders[LnadHeaders["CONTACT_PERSON"] = 21] = "CONTACT_PERSON";
-    LnadHeaders[LnadHeaders["PICTURE_LINK"] = 22] = "PICTURE_LINK";
-    LnadHeaders[LnadHeaders["OBJECT_CREATE_DATE"] = 23] = "OBJECT_CREATE_DATE";
-    LnadHeaders[LnadHeaders["CONTRACT_DATE_FROM"] = 24] = "CONTRACT_DATE_FROM";
-    LnadHeaders[LnadHeaders["CONTRACT_DATE_TO"] = 25] = "CONTRACT_DATE_TO";
-    LnadHeaders[LnadHeaders["OBJECT_UPDATE_DATE"] = 26] = "OBJECT_UPDATE_DATE";
-})(LnadHeaders || (LnadHeaders = {}));
+var LandHeaders;
+(function (LandHeaders) {
+    LandHeaders[LandHeaders["CREATE_TIME"] = 0] = "CREATE_TIME";
+    LandHeaders[LandHeaders["OBJECT_NUMBER"] = 1] = "OBJECT_NUMBER";
+    LandHeaders[LandHeaders["OBJECT_NAME"] = 2] = "OBJECT_NAME";
+    LandHeaders[LandHeaders["CONTRACT_TYPE"] = 3] = "CONTRACT_TYPE";
+    LandHeaders[LandHeaders["LOCATION"] = 4] = "LOCATION";
+    LandHeaders[LandHeaders["LAND_PATTERN"] = 5] = "LAND_PATTERN";
+    LandHeaders[LandHeaders["LAND_USAGE"] = 6] = "LAND_USAGE";
+    LandHeaders[LandHeaders["LAND_TYPE"] = 7] = "LAND_TYPE";
+    LandHeaders[LandHeaders["ADDRESS"] = 8] = "ADDRESS";
+    LandHeaders[LandHeaders["POSITION"] = 9] = "POSITION";
+    LandHeaders[LandHeaders["VALUATION"] = 10] = "VALUATION";
+    LandHeaders[LandHeaders["LAND_SIZE"] = 11] = "LAND_SIZE";
+    LandHeaders[LandHeaders["NUMBER_OF_OWNER"] = 12] = "NUMBER_OF_OWNER";
+    LandHeaders[LandHeaders["ROAD_NEARBY"] = 13] = "ROAD_NEARBY";
+    LandHeaders[LandHeaders["DIRECTION"] = 14] = "DIRECTION";
+    LandHeaders[LandHeaders["WATER_ELECTRICITY_SUPPLY"] = 15] = "WATER_ELECTRICITY_SUPPLY";
+    LandHeaders[LandHeaders["WIDTH"] = 16] = "WIDTH";
+    LandHeaders[LandHeaders["DEPTH"] = 17] = "DEPTH";
+    LandHeaders[LandHeaders["BUILDING_COVERAGE_RATE"] = 18] = "BUILDING_COVERAGE_RATE";
+    LandHeaders[LandHeaders["VOLUME_RATE"] = 19] = "VOLUME_RATE";
+    LandHeaders[LandHeaders["MEMO"] = 20] = "MEMO";
+    LandHeaders[LandHeaders["CONTACT_PERSON"] = 21] = "CONTACT_PERSON";
+    LandHeaders[LandHeaders["PICTURE_LINK"] = 22] = "PICTURE_LINK";
+    LandHeaders[LandHeaders["OBJECT_CREATE_DATE"] = 23] = "OBJECT_CREATE_DATE";
+    LandHeaders[LandHeaders["CONTRACT_DATE_FROM"] = 24] = "CONTRACT_DATE_FROM";
+    LandHeaders[LandHeaders["CONTRACT_DATE_TO"] = 25] = "CONTRACT_DATE_TO";
+    LandHeaders[LandHeaders["OBJECT_UPDATE_DATE"] = 26] = "OBJECT_UPDATE_DATE";
+})(LandHeaders || (LandHeaders = {}));
 
 /**
  * 輔助函數：將 GQL 傳回的特殊 JSON 格式
@@ -412,7 +404,7 @@ function searchObjects(contractType, objectType, objectPattern, objectName, valu
         if (GID === null || GID === undefined) return;
 
         const isBuilding = sheetName.toUpperCase() === 'BUILDING';
-        const Headers = isBuilding ? BuildingHeaders : LnadHeaders;
+        const Headers = isBuilding ? BuildingHeaders : LandHeaders;
         let queryConditions = [];
         
         // --- 動態建立 GQL WHERE 查詢條件 ---
@@ -450,7 +442,7 @@ function searchObjects(contractType, objectType, objectPattern, objectName, valu
         }
 
         if (objectPattern && objectPattern.length > 0) {
-            const patternCol = isBuilding ? toGqlCol(BuildingHeaders.BUILDING_TYPE) : toGqlCol(LnadHeaders.LAND_PATTERN);
+            const patternCol = isBuilding ? toGqlCol(BuildingHeaders.BUILDING_TYPE) : toGqlCol(LandHeaders.LAND_PATTERN);
             const patternConditions = objectPattern.map(p => `${patternCol} = '${p}'`);
             if (patternConditions.length > 0) {
                 queryConditions.push(`(${patternConditions.join(' OR ')})`);
@@ -500,7 +492,7 @@ function searchObjects(contractType, objectType, objectPattern, objectName, valu
             const { headers, rows } = parseGqlResponse(response);
             
             const temp = rows.map((row) => {
-                let headerMap = isBuilding ? BuildingHeaders : LnadHeaders;
+                let headerMap = isBuilding ? BuildingHeaders : LandHeaders;
                 // 回傳的資料結構
                 return {
                     objectType: sheetName,
@@ -578,24 +570,24 @@ function getAllPositions() {
     if (landHeaders && landValues) {
         positions = positions.concat(landValues
             .filter(function (row) {
-            if (!row[LnadHeaders.POSITION]) {
+            if (!row[LandHeaders.POSITION]) {
                 return false;
             }
-            var value = row[LnadHeaders.POSITION].split(',');
+            var value = row[LandHeaders.POSITION].split(',');
             return value != null && value.length == 2 && !isNaN(value[0]) && !isNaN(value[1]);
         })
             .map(function (row) {
             var objectMapData = {
                 objectType: 'land',
-                objectNumber: row[LnadHeaders.OBJECT_NUMBER],
-                objectName: row[LnadHeaders.OBJECT_NAME],
-                contractType: row[LnadHeaders.CONTRACT_TYPE],
-                location: row[LnadHeaders.LOCATION],
-                position: row[LnadHeaders.POSITION],
-                valuation: row[LnadHeaders.VALUATION],
-                description: row[LnadHeaders.OBJECT_NAME],
-                memo: row[LnadHeaders.MEMO],
-                contractPerson: row[LnadHeaders.CONTACT_PERSON]
+                objectNumber: row[LandHeaders.OBJECT_NUMBER],
+                objectName: row[LandHeaders.OBJECT_NAME],
+                contractType: row[LandHeaders.CONTRACT_TYPE],
+                location: row[LandHeaders.LOCATION],
+                position: row[LandHeaders.POSITION],
+                valuation: row[LandHeaders.VALUATION],
+                description: row[LandHeaders.OBJECT_NAME],
+                memo: row[LandHeaders.MEMO],
+                contractPerson: row[LandHeaders.CONTACT_PERSON]
             };
             return objectMapData;
         }));
@@ -646,7 +638,7 @@ function searchLastNumOfNumberedObjects(objectType) {
             break;
         case 'LAND':
             objectNumberPrefix = 'B';
-            objectNumberColumn = LnadHeaders.OBJECT_NUMBER;
+            objectNumberColumn = LandHeaders.OBJECT_NUMBER;
             break;
         default:
     }
